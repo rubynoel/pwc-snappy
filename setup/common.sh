@@ -2,9 +2,9 @@ set_aws_provisioning_creds() {
     assumedRole=$(
         aws sts assume-role --role-arn "$PROVISIONING_ROLE" --role-session-name SnappyTechTestProvisioningRole-EnvDependencies-Session
     )
-    export AWS_ACCESS_KEY_ID=$(echo $assumedRole | jq --raw-output '.AccessKeyId')
-    export AWS_SECRET_ACCESS_KEY=$(echo $assumedRole | jq --raw-output '.SecretAccessKey')
-    export AWS_SESSION_TOKEN=$(echo $assumedRole | jq --raw-output '.SessionToken')
+    export AWS_ACCESS_KEY_ID=$(echo $assumedRole | jq --raw-output '.Credentials.AccessKeyId')
+    export AWS_SECRET_ACCESS_KEY=$(echo $assumedRole | jq --raw-output '.Credentials.SecretAccessKey')
+    export AWS_SESSION_TOKEN=$(echo $assumedRole | jq --raw-output '.Credentials.SessionToken')
     echo $assumedRole
 }
 

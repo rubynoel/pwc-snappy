@@ -12,9 +12,7 @@ An AWS EC2 instance with Docker installed. Login to the instance to execute the 
 
 Execute the below commands from the AWS cli (with a profile that has create permissions in IAM). Alternatively you can use the AWS console to perform these steps by using the policy json file provided.
 
-#### If the EC2 instance does not exist or is not associated with an instance profile yet
-
-- Create a EC2 Instance Role with the required permissions for provisioning snappy resources
+This section assumes you have an EC2 instance role created already (eg. arn:aws:iam::123456789:role/ec2-basic-ro-role) and assigned to the instance profile.
 
 ```
 aws iam create-policy --policy-name SnappyTechTestProvisioningRolePolicy --policy-document file://provisioning-role-policy.json
@@ -39,36 +37,16 @@ The output of the create-policy command will be a json similar to the sample out
 }
 ```
 
+In the file provisioning-role-trust-policy.json, replace the "arn:aws:iam::123456789:role/ec2-basic-ro-role" value with the arn of your ec2 instance role. This will allow the EC2 instance to assume the SnappyTechTestProvisioningRole and provision the resources.
+
 ```
 aws iam create-role --role-name SnappyTechTestProvisioningRole --assume-role-policy-document file://provisioning-role-trust-policy.json
 
- update-assume-role-policy --role-name SnappyTechTestProvisioningRole --policy-document file://provisioning-role-trust-policy.json
 ```
 
 Substitute the value for policy-arn parameter with the Arn value copied from the create-policy command output.
 
 ```
 aws iam attach-role-policy --policy-arn arn:aws:iam::0123456789012:policy/SnappyTechTestProvisioningRolePolicy --role-name SnappyTechTestProvisioningRole
-
-aws iam create-instance-profile --instance-profile-name SnappyTechTestProvisioningInstanceProfile
-
-aws iam add-role-to-instance-profile --instance-profile-name SnappyTechTestProvisioningInstanceProfile --role-name SnappyTechTestProvisioningRole
-
-```
-
-Specify the SnappyTechTestProvisioningInstanceProfile either during new EC2 instance launch in the IAM role field of the Instance Details section or attach the profile to the existing instance using Attach/Replace IAM Role in Instance Settings.
-
-#### If you already have an instance profile associated with this EC2 instance
-
-```
-
-aws iam create-policy --policy-name SnappyTechTestProvisioningRolePolicy --policy-document file://provisioning-role-policy.json
-
-```
-
-The output of the create-policy command will be a json similar to the sample output below. Copy the value of the Arn field to use in the next command.
-
-```
-aws iam attach-role-policy --policy-arn arn:aws:iam::0123456789012:policy/SnappyTechTestProvisioningRolePolicy --role-name NameOfExistingInstanceRole
 
 ```
