@@ -6,7 +6,7 @@ source ./common.sh
 set_aws_provisioning_creds
 cfn_stack_name=$APPLICATION_ID-$STAGE
 provision_terraform_backend $cfn_stack_name
-stack_output=$(aws cloudformation describe-stacks --stack-name $cfn_stack_name --parameter-overrides ApplicationId=$APPLICATION_ID)
+stack_output=$(aws cloudformation describe-stacks --stack-name $cfn_stack_name)
 unset_aws_creds
 
 export TF_VAR_s3_kms_key_id=$(echo $stack_output | jq --raw-output '.Stacks[0].Outputs[0].OutputValue')

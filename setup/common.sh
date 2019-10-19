@@ -5,7 +5,6 @@ set_aws_provisioning_creds() {
     export AWS_ACCESS_KEY_ID=$(echo $assumedRole | jq --raw-output '.Credentials.AccessKeyId')
     export AWS_SECRET_ACCESS_KEY=$(echo $assumedRole | jq --raw-output '.Credentials.SecretAccessKey')
     export AWS_SESSION_TOKEN=$(echo $assumedRole | jq --raw-output '.Credentials.SessionToken')
-    echo $assumedRole
 }
 
 unset_aws_creds() {
@@ -14,7 +13,7 @@ unset_aws_creds() {
 
 provision_terraform_backend() {
     cfn_stack_name=$1
-    aws cloudformation deploy --template-file ./cfn-templates/S3.yml --stack-name $cfn_stack_name
+    aws cloudformation deploy --template-file ./cfn-templates/S3.yml --parameter-overrides ApplicationId=$APPLICATION_ID --stack-name $cfn_stack_name
 }
 
 # Get the account id from the instance metadata url

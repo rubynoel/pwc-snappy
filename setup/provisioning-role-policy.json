@@ -5,6 +5,11 @@
       "Effect": "Allow",
       "Action": ["s3:Get*", "s3:List*"],
       "Resource": ["arn:aws:s3:::techtest-pwc-*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["cloudformation:DescribeStacks"],
+      "Resource": ["arn:aws:cloudformation:::stack/pwc_snappy*"]
     }
   ]
 }
