@@ -24,7 +24,7 @@ export PROVISIONING_ROLE=arn:aws:iam::$AWS_ACCOUNT_ID:role/SnappyTechTestProvisi
 
 # set default value for env variables if not set
 export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-ap-southeast-2}"
-export APPLICATION_ID="${APPLICATION_ID:-pwc_snappy}"
+export APPLICATION_ID="${APPLICATION_ID:-pwc-snappy}"
 export STAGE="${STAGE:-unittest}"
 
 export ECR_REPO_NAME=${APPLICATION_ID}-${STAGE}
