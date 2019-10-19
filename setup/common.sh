@@ -14,6 +14,7 @@ unset_aws_creds() {
 provision_terraform_backend() {
     cfn_stack_name=$1
     aws cloudformation deploy --template-file ./cfn-templates/S3.yml --parameter-overrides ApplicationId=$APPLICATION_ID --stack-name $cfn_stack_name
+    echo "cfn deploy done"
 }
 
 # Get the account id from the instance metadata url

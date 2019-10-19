@@ -6,6 +6,7 @@ source ./common.sh
 set_aws_provisioning_creds
 cfn_stack_name=$APPLICATION_ID_$STAGE
 provision_terraform_backend $cfn_stack_name
+echo "describe ........"
 stack_output=$(aws cloudformation describe-stacks --stack-name $cfn_stack_name)
 unset_aws_creds
 
