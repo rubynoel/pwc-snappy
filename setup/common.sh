@@ -5,6 +5,7 @@ set_aws_provisioning_creds() {
     export AWS_ACCESS_KEY_ID=$(echo $assumedRole | jq --raw-output '.AccessKeyId')
     export AWS_SECRET_ACCESS_KEY=$(echo $assumedRole | jq --raw-output '.SecretAccessKey')
     export AWS_SESSION_TOKEN=$(echo $assumedRole | jq --raw-output '.SessionToken')
+    echo $assumedRole
 }
 
 unset_aws_creds() {

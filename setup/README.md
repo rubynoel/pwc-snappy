@@ -41,6 +41,8 @@ The output of the create-policy command will be a json similar to the sample out
 
 ```
 aws iam create-role --role-name SnappyTechTestProvisioningRole --assume-role-policy-document file://provisioning-role-trust-policy.json
+
+ update-assume-role-policy --role-name SnappyTechTestProvisioningRole --policy-document file://provisioning-role-trust-policy.json
 ```
 
 Substitute the value for policy-arn parameter with the Arn value copied from the create-policy command output.
