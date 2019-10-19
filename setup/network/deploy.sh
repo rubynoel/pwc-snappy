@@ -5,7 +5,7 @@ source ./common.sh
 # Create/Update the terraform remote backend
 set_aws_provisioning_creds
 echo APPLICATION_ID is $APPLICATION_ID
-cfn_stack_name="$APPLICATION_ID"_"$STAGE"
+cfn_stack_name="$APPLICATION_ID""$STAGE"
 echo cfn_stack_name is $cfn_stack_name
 provision_terraform_backend $cfn_stack_name
 echo "describe ........"
