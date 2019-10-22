@@ -17,13 +17,24 @@ provision_terraform_backend() {
     echo "cfn deploy done"
 }
 
+build_image_and_push_to_ecr() {
+    set_aws_provisioning_creds
+    $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+    local IMAGE_TAG=$1
+    local build_dir=$2
+    docker build $build_dir -t ${ECR_REPO_NAME}:$IMAGE_TAG
+    docker tag $ECR_REPO_NAME:$IMAGE_TAG $ECR_REPO_URL/$ECR_REPO_NAME:$IMAGE_TAG
+    docker push $ECR_REPO_URL/$ECR_REPO_NAME:$IMAGE_TAG
+    unset_aws_creds
+}
+
 # Get the account id from the instance metadata url
 export AWS_ACCOUNT_ID=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document | jq --raw-output '.accountId')
 echo AWS_ACCOUNT_ID is $AWS_ACCOUNT_ID
 export PROVISIONING_ROLE=arn:aws:iam::$AWS_ACCOUNT_ID:role/SnappyTechTestProvisioningRole
 
 # set default value for env variables if not set
-export AWS_DEFAULT_REGION="${AWS_DEFAULT_REGION:-ap-southeast-2}"
+export AWS_DEFAULT_REGION="${AWS_REGION:-ap-southeast-2}"
 export APPLICATION_ID="${APPLICATION_ID:-pwc-snappy}"
 export STAGE="${STAGE:-unittest}"
 

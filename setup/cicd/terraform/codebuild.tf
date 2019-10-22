@@ -59,7 +59,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
       ],
       "Condition": {
         "StringEquals": {
-          "ec2:Subnet": ["${join(",",module.vpc.private_subnets)}"],
+          "ec2:Subnet": ["${data.aws_ssm_parameter.param_private_subnet_ids.value}"],
           "ec2:AuthorizedService": "codebuild.amazonaws.com"
         }
       }
@@ -122,12 +122,12 @@ resource "aws_codebuild_project" "codebuild_project" {
   }
 
   vpc_config {
-    vpc_id = "${module.vpc.vpc_id}"
+    vpc_id = "${data.aws_ssm_parameter.vpc_id.value}"
 
-    subnets = module.vpc.private_subnets
+    subnets = split(",","${data.aws_ssm_parameter.param_private_subnet_ids.value}")
 
     security_group_ids = [
-      "${module.vpc.default_security_group_id}" #TODO: Create a separate security group for running builds
+      "${data.aws_ssm_parameter.default_security_group_id.value}" #TODO: Create a separate security group for running builds
     ]
   }
 

@@ -18,7 +18,7 @@ RUN echo "AWS CLI installed" && aws --version
 
 WORKDIR /techtest
 
-COPY ./network /techtest/
+COPY ./base /techtest/
 
 COPY ./cfn-templates /techtest/cfn-templates
 COPY ./common.sh /techtest/

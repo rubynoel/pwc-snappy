@@ -26,3 +26,11 @@ resource "aws_ssm_parameter" "public_subnet_ids" {
   overwrite = true
   tags = local.common_tags
 }
+
+resource "aws_ssm_parameter" "default_security_group_id" {
+  name        = "${local.ssm_param_path_prefix}/default_security_group_id"
+  type        = "String"
+  value       = "${module.vpc.default_security_group_id}"
+  overwrite = true
+  tags = local.common_tags
+}
