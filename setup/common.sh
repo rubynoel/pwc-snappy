@@ -24,9 +24,7 @@ unset_aws_creds() {
 }
 
 provision_terraform_backend() {
-    cfn_stack_name=$1
-    aws cloudformation deploy --template-file ./cfn-templates/S3.yml --parameter-overrides ApplicationId=$APPLICATION_ID --stack-name $cfn_stack_name
-    echo "cfn deploy done"
+    aws cloudformation deploy --template-file ./cfn-templates/S3.yml --parameter-overrides ApplicationId=$2 --stack-name $1
 }
 
 build_image_and_push_to_ecr() {
