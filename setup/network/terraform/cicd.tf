@@ -70,7 +70,7 @@ EOF
 }
 
 resource "aws_codepipeline_webhook" "codepipeline_webhook" {
-  name            = "${local.cicd_name_prefix}-github-webhook"
+  name            = "${local.cicd_name_prefix}-git-webhook"
   authentication  = "GITHUB_HMAC"
   target_action   = "Source"
   target_pipeline = "${aws_codepipeline.pipeline.name}"
