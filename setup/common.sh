@@ -7,6 +7,18 @@ set_aws_provisioning_creds() {
     export AWS_SESSION_TOKEN=$(echo $assumedRole | jq --raw-output '.Credentials.SessionToken')
 }
 
+set_aws_provisioning_creds_withoutjq() {
+    # convenience method to run outside docker container without jq installed
+    provisioning_role=arn:aws:iam::$AWS_ACCOUNT_ID:role/MomentonTechTestProvisioningRole
+    assumedRole=$(
+        aws sts assume-role --role-arn "$provisioning_role" --role-session-name MomentonTechTestProvisioningRole-EnvDependencies-Session
+    )
+    export AWS_ACCESS_KEY_ID=$(echo $assumedRole | grep -o '"AccessKeyId": *"[^"]*"' | grep -o '"[^"]*"$' | cut -d '"' -f2)
+    export AWS_SECRET_ACCESS_KEY=$(echo $assumedRole | grep -o '"SecretAccessKey": *"[^"]*"' | grep -o '"[^"]*"$' | cut -d '"' -f2)
+    export AWS_SESSION_TOKEN=$(echo $assumedRole | grep -o '"SessionToken": *"[^"]*"' | grep -o '"[^"]*"$' | cut -d '"' -f2)
+
+}
+
 unset_aws_creds() {
     unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
 }
