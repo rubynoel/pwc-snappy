@@ -123,7 +123,7 @@ resource "aws_codebuild_project" "codebuild_project" {
   vpc_config {
     vpc_id = "${module.vpc.vpc_id}"
 
-    subnets = ["${module.vpc.private_subnets}"]
+    subnets = module.vpc.private_subnets
 
     security_group_ids = [
       "${module.vpc.default_vpc_default_security_group_id}" #TODO: Create a separate security group for running builds
