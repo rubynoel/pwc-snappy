@@ -13,6 +13,7 @@ resource "aws_s3_bucket" "codepipeline_bucket" {
       }
     }
   }
+  tags = local.common_tags
 }
 
 resource "aws_iam_role" "codepipeline_role" {
@@ -32,6 +33,7 @@ resource "aws_iam_role" "codepipeline_role" {
   ]
 }
 EOF
+  tags = local.common_tags
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
@@ -65,6 +67,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   ]
 }
 EOF
+  tags = local.common_tags
 }
 
 data "github_repository" "source_repo" {
@@ -108,6 +111,8 @@ resource "aws_codepipeline" "pipeline" {
     location = "${aws_s3_bucket.codepipeline_bucket.bucket}"
     type     = "S3"
   }
+
+  tags = local.common_tags
 
   stage {
     name = "Source"
