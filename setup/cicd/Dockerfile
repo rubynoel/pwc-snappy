@@ -44,4 +44,6 @@ RUN chmod +x /techtest/deploy.sh
 
 RUN chmod +x /techtest/common.sh
 
+RUN service docker start
+
 ENTRYPOINT ["/techtest/deploy.sh"]
