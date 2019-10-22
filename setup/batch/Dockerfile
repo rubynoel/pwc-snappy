@@ -1,8 +1,8 @@
 FROM node:8.16.2-alpine
 
-RUN apt-get update
+RUN apk update
 
-RUN apt-get install -y zip unzip wget python3-pip jq curl
+RUN apk add --update zip unzip wget python3-pip jq curl
 
 RUN pip3 install awscli --upgrade
 
