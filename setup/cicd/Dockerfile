@@ -1,7 +1,15 @@
 FROM amd64/alpine:3.7
 
-RUN apk update
-RUN apk add  zip unzip wget python3-pip jq curl docker terraform
+RUN apk add --update \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+    && pip install awscli --upgrade --user \
+    && apk --purge -v del py-pip \
+    && rm -rf /var/cache/apk/*
+
+RUN apk add --update zip unzip wget jq curl docker terraform
 
 RUN rc-update add docker boot
 
