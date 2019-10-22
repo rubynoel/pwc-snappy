@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 source ./common.sh
 source ./env.sh
 # deploy infra and network dependencies
