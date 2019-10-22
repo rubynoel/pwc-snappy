@@ -32,18 +32,3 @@ output "azs" {
   description = "A list of availability zones spefified as argument to this module"
   value       = ["${module.vpc.azs}"]
 }
-
-output "ssm_automation_build_cicd_node_ami_doc_name" {
-  description = "Name of automation document used to create/update cicd node ami"
-  value       = ["${aws_ssm_document.ssm_automation_create_cicd_node_ami_doc.name}"]
-}
-
-output "ssm_managed_instance_profile_name" {
-  description = "SSM Managed Instance Name"
-  value       = ["${aws_iam_instance_profile.ssm_managed_instance_profile.name}"]
-}
-
-output "ssm_automation_service_role_arn" {
-  description = "The ARN of the role that allows Automation to perform the actions on your behalf"
-  value       = ["${aws_iam_role.ssm_automation_service_role.arn}"]
-}
