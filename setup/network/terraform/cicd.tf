@@ -68,7 +68,7 @@ EOF
 }
 
 data "github_repository" "source_repo" {
-  full_name = "${var.git_org_name}/${var.git_repo_name}"
+  name = "${var.git_repo_name}"
 }
 
 resource "aws_codepipeline_webhook" "codepipeline_webhook" {
