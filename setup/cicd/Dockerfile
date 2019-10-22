@@ -16,7 +16,7 @@ RUN apk add --update bash \
     && apk --purge -v del py-pip \
     && rm -rf /var/cache/apk/*
 
-RUN rc-update add docker boot
+#RUN rc-update add docker boot
 
 RUN rc-service docker start
 
