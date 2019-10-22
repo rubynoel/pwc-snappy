@@ -1,6 +1,7 @@
 FROM amd64/alpine:3.7
 
-RUN apk add --update zip unzip wget python3-pip jq curl docker terraform
+RUN apk update
+RUN apk add  zip unzip wget python3-pip jq curl docker terraform
 
 RUN rc-update add docker boot
 
