@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 
 source ./common.sh
+set_aws_provisioning_creds
 
 #Push build container images to ecr for use in ci pipeline
 build_image_and_push_to_ecr "batch-build" "./batch"
 
 # Create/Update the terraform remote backend
-set_aws_provisioning_creds
 cfn_stack_name="$APPLICATION_ID"-"$STAGE"-cicd
 provision_terraform_backend $cfn_stack_name
 stack_output=$(aws cloudformation describe-stacks --stack-name $cfn_stack_name)
+
 unset_aws_creds
 
 export TF_VAR_s3_kms_key_id=$(echo $stack_output | jq --raw-output '.Stacks[0].Outputs[0].OutputValue')

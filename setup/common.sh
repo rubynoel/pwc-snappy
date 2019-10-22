@@ -18,14 +18,12 @@ provision_terraform_backend() {
 }
 
 build_image_and_push_to_ecr() {
-    set_aws_provisioning_creds
     $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
     local IMAGE_TAG=$1
     local build_dir=$2
     docker build $build_dir -t ${ECR_REPO_NAME}:$IMAGE_TAG
     docker tag $ECR_REPO_NAME:$IMAGE_TAG $ECR_REPO_URL/$ECR_REPO_NAME:$IMAGE_TAG
     docker push $ECR_REPO_URL/$ECR_REPO_NAME:$IMAGE_TAG
-    unset_aws_creds
 }
 
 # Get the account id from the instance metadata url

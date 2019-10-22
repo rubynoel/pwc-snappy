@@ -16,7 +16,9 @@ RUN add-apt-repository \
     $(lsb_release -cs) \
     stable"
 
-RUN apt-get install docker-ce docker-ce-cli containerd.io
+RUN apt-get update
+
+RUN apt-get install -y docker-ce docker-ce-cli containerd.io
 
 RUN wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
 
@@ -35,7 +37,9 @@ WORKDIR /techtest
 COPY ./cicd /techtest/
 
 COPY ./cfn-templates /techtest/cfn-templates
+COPY ./cicd/batch /techtest/batch
 COPY ./common.sh /techtest/
+
 
 RUN chmod +x /techtest/deploy.sh
 
