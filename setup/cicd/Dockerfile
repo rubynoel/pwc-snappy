@@ -1,32 +1,33 @@
-FROM amd64/alpine:3.7
+FROM ubuntu:latest
 
-RUN apk add --update bash \
-    python \
-    python-dev \
-    py-pip \
-    build-base \
-    zip \ 
-    unzip \
-    wget \
-    jq \
-    curl \
-    docker openrc \
-    terraform \
-    && pip install awscli --upgrade \
-    && apk --purge -v del py-pip \
-    && rm -rf /var/cache/apk/*
+RUN apt-get update
 
-#RUN rc-update add docker boot
+RUN apt-get install -y zip unzip wget python3-pip jq curl \
+    apt-transport-https \
+    ca-certificates \
+    gnupg-agent \
+    software-properties-common
 
-#RUN rc-service docker start
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-#RUN wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
+RUN add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) \
+    stable"
 
-#RUN unzip terraform_0.12.10_linux_amd64.zip
+RUN apt-get update
 
-#RUN mv terraform /usr/local/bin/
+RUN apt-get install -y docker-ce docker-ce-cli containerd.io
+
+RUN wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
+
+RUN unzip terraform_0.12.10_linux_amd64.zip
+
+RUN mv terraform /usr/local/bin/
 
 RUN echo "Terraform installed" && terraform --version
+
+RUN pip3 install awscli --upgrade
 
 RUN echo "AWS CLI installed" && aws --version
 
