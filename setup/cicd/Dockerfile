@@ -5,7 +5,6 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
-    rc-update \
     zip \ 
     unzip \
     wget \
@@ -17,7 +16,7 @@ RUN apk add --update \
     && apk --purge -v del py-pip \
     && rm -rf /var/cache/apk/*
 
-RUN rc-update add docker boot
+RUN service docker start
 
 #RUN wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
 
