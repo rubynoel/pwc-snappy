@@ -77,7 +77,6 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
   ]
 }
 POLICY
-  tags = local.common_tags
 }
 
 resource "aws_codebuild_project" "codebuild_project" {

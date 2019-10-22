@@ -67,7 +67,6 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
   ]
 }
 EOF
-  tags = local.common_tags
 }
 
 data "github_repository" "source_repo" {
