@@ -2,10 +2,9 @@ FROM ubuntu:18.04
 
 RUN apt-get update
 
-RUN apt-get install -y zip unzip wget python3-pip jq curl \
+RUN apt-get install -y --fix-missing zip unzip wget python3-pip jq curl \
     apt-transport-https \
     ca-certificates \
-    curl \
     gnupg-agent \
     software-properties-common
 
