@@ -15,6 +15,6 @@ data "aws_ssm_parameter" "public_subnet_ids" {
   name  = "${local.ssm_param_path_prefix}/public-subnet-ids"
 }
 
-resource "aws_ssm_parameter" "default_security_group_id" {
+data "aws_ssm_parameter" "default_security_group_id" {
   name  = "${local.ssm_param_path_prefix}/default_security_group_id"
 }

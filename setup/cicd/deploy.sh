@@ -3,6 +3,9 @@
 source ./common.sh
 set_aws_provisioning_creds
 
+#Push build container images to ecr for use in ci pipeline
+build_image_and_push_to_ecr "batch-build" "./batch"
+
 # Create/Update the terraform remote backend
 cfn_stack_name="$APPLICATION_ID"-"$STAGE"-cicd
 provision_terraform_backend $cfn_stack_name $APPLICATION_ID-cicd

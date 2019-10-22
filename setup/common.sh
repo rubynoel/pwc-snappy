@@ -11,7 +11,7 @@ set_aws_provisioning_creds_withoutjq() {
     # convenience method to run outside docker container without jq installed
     provisioning_role=arn:aws:iam::$AWS_ACCOUNT_ID:role/MomentonTechTestProvisioningRole
     assumedRole=$(
-        aws sts assume-role --role-arn "$provisioning_role" --role-session-name MomentonTechTestProvisioningRole-EnvDependencies-Session
+        aws sts assume-role --role-arn "$PROVISIONING_ROLE" --role-session-name SnappyTechTestProvisioningRole-EnvDependencies-Session
     )
     export AWS_ACCESS_KEY_ID=$(echo $assumedRole | grep -o '"AccessKeyId": *"[^"]*"' | grep -o '"[^"]*"$' | cut -d '"' -f2)
     export AWS_SECRET_ACCESS_KEY=$(echo $assumedRole | grep -o '"SecretAccessKey": *"[^"]*"' | grep -o '"[^"]*"$' | cut -d '"' -f2)
