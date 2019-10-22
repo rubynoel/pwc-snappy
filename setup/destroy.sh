@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+source ./env.sh
 # deploy infra and network dependencies
 docker build . -t pwc-base-destroy:latest --file ./network/Dockerfile
 
