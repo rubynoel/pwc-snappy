@@ -5,11 +5,17 @@ RUN apk add --update \
     python-dev \
     py-pip \
     build-base \
+    rc-update \
+    zip \ 
+    unzip \
+    wget \
+    jq \
+    curl \
+    docker \
+    terraform \
     && pip install awscli --upgrade --user \
     && apk --purge -v del py-pip \
     && rm -rf /var/cache/apk/*
-
-RUN apk add --update zip unzip wget jq curl docker terraform
 
 RUN rc-update add docker boot
 
