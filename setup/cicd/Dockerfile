@@ -10,13 +10,13 @@ RUN apk add --update \
     wget \
     jq \
     curl \
-    docker \
+    docker openrc \
     terraform \
     && pip install awscli --upgrade --user \
     && apk --purge -v del py-pip \
     && rm -rf /var/cache/apk/*
 
-RUN service docker start
+RUN rc-update add docker boot
 
 #RUN wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
 
