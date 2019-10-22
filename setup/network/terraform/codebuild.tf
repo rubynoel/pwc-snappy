@@ -20,7 +20,7 @@ EOF
 
 resource "aws_iam_role_policy" "codebuild_role_policy" {
   role = "${aws_iam_role.codebuild_role.name}"
-
+  name = "${local.cicd_name_prefix}-codebuild-policy"
   policy = <<POLICY
 {
   "Version": "2012-10-17",
