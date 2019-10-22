@@ -21,8 +21,6 @@ RUN rc-update add docker boot
 
 RUN echo "Terraform installed" && terraform --version
 
-RUN pip3 install awscli --upgrade
-
 RUN echo "AWS CLI installed" && aws --version
 
 WORKDIR /techtest
