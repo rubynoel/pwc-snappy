@@ -48,6 +48,9 @@ variable "public_subnets_cidr" {
   default = ["20.0.101.0/24", "20.0.102.0/24", "20.0.103.0/24"]
 }
 
+variable "github_token" {
+  type = string
+}
 
 variable "git_org_name" {
   type = string
