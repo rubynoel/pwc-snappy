@@ -1,6 +1,6 @@
 FROM amd64/alpine:3.7
 
-RUN apk add --update \
+RUN apk add --update bash \
     python \
     python-dev \
     py-pip \
