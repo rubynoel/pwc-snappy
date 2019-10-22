@@ -9,6 +9,10 @@ Login to the instance to execute the setup scripts in this repository. The insta
 
 **Note**: The scripts will detect the AWS account id from the EC2 instance metadata and provision resources in this account. If you wish to provision the resources in a different account, the scripts need to be modified to use a cross account role in target account that is assumable by this instance to provision resources in the target account.
 
+## GitHub Personal Access Token ......................
+
+TODO env.sh
+
 ## Executing the scripts
 
 From the root of the setup directory, execute the following
