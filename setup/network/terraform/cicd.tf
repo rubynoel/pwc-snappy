@@ -88,7 +88,7 @@ resource "aws_codepipeline_webhook" "codepipeline_webhook" {
 }
 
 resource "github_repository_webhook" "github_webhook" {
-  repository = "${github_repository.source_repo.name}"
+  repository = "${data.github_repository.source_repo.name}"
 
   name = "${local.cicd_name_prefix}-web"
 
