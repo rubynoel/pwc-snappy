@@ -69,10 +69,6 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
 EOF
 }
 
-data "github_repository" "source_repo" {
-  name = "${var.git_repo_name}"
-}
-
 resource "aws_codepipeline_webhook" "codepipeline_webhook" {
   name            = "${local.cicd_name_prefix}-github-webhook"
   authentication  = "GITHUB_HMAC"
@@ -90,7 +86,7 @@ resource "aws_codepipeline_webhook" "codepipeline_webhook" {
 }
 
 resource "github_repository_webhook" "github_webhook" {
-  repository = "${data.github_repository.source_repo.name}"
+  repository = "${var.git_repo_name}"
 
   configuration {
     url          = "${aws_codepipeline_webhook.codepipeline_webhook.url}"
