@@ -11,4 +11,4 @@ STAGE=dev AWS_REGION=ap-southeast-2 GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN docker run
 #build_image_and_push_to_ecr "batch-build" "./cicd/batch"
 
 docker build . -t pwc-cicd:latest --file ./cicd/Dockerfile
-STAGE=dev AWS_REGION=ap-southeast-2 GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN docker run /var/run/docker.sock:/var/run/docker.sock --env STAGE --env AWS_REGION --env GITHUB_TOKEN pwc-cicd:latest
+STAGE=dev AWS_REGION=ap-southeast-2 GITHUB_TOKEN=$GITHUB_ACCESS_TOKEN docker run -v /var/run/docker.sock:/var/run/docker.sock --env STAGE --env AWS_REGION --env GITHUB_TOKEN pwc-cicd:latest
