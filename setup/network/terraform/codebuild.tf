@@ -55,7 +55,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
         "ec2:CreateNetworkInterfacePermission"
       ],
       "Resource": [
-        "arn:aws:ec2:${var.aws_region}:${var.aws_account_id}:network-interface/*"
+        "arn:aws:ec2:*:*:network-interface/*"
       ],
       "Condition": {
         "StringEquals": {
