@@ -12,7 +12,7 @@ RUN apk add --update \
     curl \
     docker openrc \
     terraform \
-    && pip install awscli --upgrade --user \
+    && pip install awscli --upgrade \
     && apk --purge -v del py-pip \
     && rm -rf /var/cache/apk/*
 
