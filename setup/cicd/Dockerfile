@@ -1,29 +1,14 @@
-FROM ubuntu:latest
+FROM amd64/alpine:3.7
 
-RUN apt-get update
+RUN apk add --update zip unzip wget python3-pip jq curl docker terraform
 
-RUN apt-get install -y zip unzip wget python3-pip jq curl \
-    apt-transport-https \
-    ca-certificates \
-    gnupg-agent \
-    software-properties-common
+RUN rc-update add docker boot
 
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#RUN wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
 
-RUN add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) \
-    stable"
+#RUN unzip terraform_0.12.10_linux_amd64.zip
 
-RUN apt-get update
-
-RUN apt-get install -y docker-ce docker-ce-cli containerd.io
-
-RUN wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
-
-RUN unzip terraform_0.12.10_linux_amd64.zip
-
-RUN mv terraform /usr/local/bin/
+#RUN mv terraform /usr/local/bin/
 
 RUN echo "Terraform installed" && terraform --version
 
