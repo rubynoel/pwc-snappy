@@ -2,49 +2,88 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "AllowKMSAliasActions",
-      "Effect": "Allow",
-      "Action": ["kms:*"],
-      "Resource": "arn:aws:kms:*:*:alias/pwc-snappy/*"
-    },
-    {
-      "Sid": "AllowKMSKeyActions",
+      "Sid": "VisualEditor0",
       "Effect": "Allow",
       "Action": [
         "kms:Create*",
-        "kms:Describe*",
-        "kms:Enable*",
+        "iam:GetRole",
         "kms:List*",
-        "kms:Put*",
-        "kms:Update*",
-        "kms:Revoke*",
-        "kms:Disable*",
-        "kms:Get*",
-        "kms:Delete*",
-        "kms:TagResource",
         "kms:UntagResource",
+        "kms:Update*",
+        "kms:Get*",
+        "kms:Describe*",
+        "kms:CancelKeyDeletion",
+        "kms:Revoke*",
+        "kms:TagResource",
+        "kms:Disable*",
         "kms:ScheduleKeyDeletion",
-        "kms:CancelKeyDeletion"
+        "kms:Delete*",
+        "kms:Enable*",
+        "kms:Put*"
       ],
       "Resource": "*"
     },
     {
       "Sid": "VisualEditor1",
       "Effect": "Allow",
-      "Action": ["iam:GetRole", "iam:PassRole"],
-      "Resource": "*"
+      "Action": "kms:*",
+      "Resource": "arn:aws:kms:*:*:alias/pwc-snappy/*"
     },
     {
-      "Sid": "AllowS3Actions",
+      "Sid": "VisualEditor2",
       "Effect": "Allow",
-      "Action": ["s3:*"],
-      "Resource": ["arn:aws:s3:::pwc-snappy-*", "arn:aws:s3:::pwc-snappy-*/*"]
+      "Action": "iam:*",
+      "Resource": [
+        "arn:aws:iam::*:policy/pwc-snappy*",
+        "arn:aws:iam::*:role/pwc-snappy*"
+      ]
     },
     {
-      "Sid": "AllowCFNActions",
+      "Sid": "VisualEditor3",
+      "Effect": "Allow",
+      "Action": "s3:*",
+      "Resource": ["arn:aws:s3:::pwc-snappy-*/*", "arn:aws:s3:::pwc-snappy-*"]
+    },
+    {
+      "Sid": "VisualEditor4",
       "Effect": "Allow",
       "Action": "cloudformation:*",
       "Resource": "arn:aws:cloudformation:*:*:stack/pwc-snappy-*/*"
+    },
+    {
+      "Sid": "AllowEC2Actions",
+      "Effect": "Allow",
+      "Action": "ec2:*",
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "aws:ResourceTag/ApplicationId": "pwc-snappy"
+        }
+      }
+    },
+    {
+      "Sid": "AllowEC2CreateActions",
+      "Effect": "Allow",
+      "Action": ["ec2:CreateVPC", "ec2:CreateSubnet"],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowOtherEC2Actions",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeDhcpOptions",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeVpcs",
+        "ec2:DescribeAddresses",
+        "ec2:AllocateAddress",
+        "ec2:AssociateAddress",
+        "ec2:DescribeTags",
+        "ec2:CreateTags"
+      ],
+      "Resource": "*"
     }
   ]
 }
