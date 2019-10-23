@@ -47,22 +47,3 @@ variable "public_subnets_cidr" {
   type = list(string)
   default = ["20.0.101.0/24", "20.0.102.0/24", "20.0.103.0/24"]
 }
-
-variable "github_token" {
-  type = string
-}
-
-variable "git_org_name" {
-  type = string
-  default = "rubynoel"
-}
-
-variable "git_repo_name" {
-  type = string
-  default = "pwc-snappy"
-}
-
-variable "git_branch" {
-  type = string
-  default = "master"
-}
