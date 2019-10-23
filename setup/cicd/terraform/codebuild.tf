@@ -175,6 +175,21 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
             "Effect": "Allow",
             "Action": "ssm:Describe*",
             "Resource": "*"
+        },
+        {
+            "Sid": "AllowBatchRead",
+            "Effect": "Allow",
+            "Action": ["batch:Describe*","batch:List*"]
+            "Resource": "*"
+        },
+        {
+            "Sid": "AllowBatchWrite",
+            "Effect": "Allow",
+            "Action": "batch:*"
+            "Resource": [
+                "arn:aws:batch:*:*:*/${var.application_id}*",
+                "arn:aws:batch:*:*:*/${var.application_id}*/*"
+            ]
         }
   ]
 }
@@ -183,7 +198,7 @@ POLICY
 
 resource "aws_codebuild_project" "codebuild_project" {
   name          = "${local.cicd_name_prefix}-project"
-  build_timeout = "5"
+  build_timeout = "15"
   service_role  = "${aws_iam_role.codebuild_role.arn}"
 
   artifacts {
