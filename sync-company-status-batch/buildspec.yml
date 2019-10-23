@@ -4,8 +4,13 @@ phases:
     runtime-versions:
       nodejs: 8
       docker: 18
-  build:
+  pre_build:
     commands:
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo "Install dependencies"
       - pwd
       - ls
@@ -17,11 +22,11 @@ phases:
       - apt-get update
       - apt-cache search source
       - apt-get install -y curl jq
+  build:
+    commands:
       - echo "Packaging application"
       - cd sync-company-status-batch/src && npm run build && cd ../..
       - echo "Building application image"
-      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
-      - IMAGE_TAG=sync-company-status-batch
       - build_dir=sync-company-status-batch
       - docker build $build_dir -t ${ECR_REPO_NAME}:$IMAGE_TAG --file $build_dir/src/Dockerfile
       - docker tag $ECR_REPO_NAME:$IMAGE_TAG $ECR_REPO_URL/$ECR_REPO_NAME:$IMAGE_TAG
