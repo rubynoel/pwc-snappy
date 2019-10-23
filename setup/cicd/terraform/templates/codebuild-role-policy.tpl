@@ -160,9 +160,9 @@
             "Resource": "*"
         },
         {
-            "Sid": "AllowBatchRead",
+            "Sid": "AllowBatchActions",
             "Effect": "Allow",
-            "Action": ["batch:Describe*","batch:List*"],
+            "Action": ["batch:Describe*","batch:List*","batch:CreateComputeEnvironment"],
             "Resource": "*"
         },
         {
