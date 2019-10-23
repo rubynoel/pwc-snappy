@@ -150,7 +150,8 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
             "Effect": "Allow",
             "Action": "cloudformation:*",
             "Resource": "arn:aws:cloudformation:*:*:stack/${var.application_id}-*/*"
-        }, {
+        }, 
+        {
             "Sid": "AllowIAMActionsForSnappyByResourceName",
             "Effect": "Allow",
             "Action": "iam:*",
@@ -160,7 +161,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
                 "arn:aws:iam::*:role/${var.application_id}*/*",
                 "arn:aws:iam::*:policy/${var.application_id}*/*"
             ]
-        }
+        },{
             "Sid": "AllowSSMActionsForSnappy",
             "Effect": "Allow",
             "Action": "ssm:*",
