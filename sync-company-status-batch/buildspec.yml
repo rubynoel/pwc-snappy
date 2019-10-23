@@ -9,6 +9,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - REPOSITORY_URI=$ECR_REPO_URL/$ECR_REPO_NAME
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
       - echo "Install dependencies"
@@ -29,10 +30,13 @@ phases:
       - echo "Building application image"
       - build_dir=sync-company-status-batch
       - docker build $build_dir -t ${ECR_REPO_NAME}:$IMAGE_TAG --file $build_dir/src/Dockerfile
-      - docker tag $ECR_REPO_NAME:$IMAGE_TAG $ECR_REPO_URL/$ECR_REPO_NAME:$IMAGE_TAG
+      - docker tag $ECR_REPO_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
       - echo "Pushing application image to ecr"
-      - docker push $ECR_REPO_URL/$ECR_REPO_NAME:$IMAGE_TAG
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
       - cd sync-company-status-batch/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
+  post_build:
+    commands:
+      - echo Build completed on `date`
 artifacts:
   files:
     - src

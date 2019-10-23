@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+echo "Latest image tag is "$IMAGE_TAG
 # Create/Update the terraform remote backend
 appResourceName=company-status-sync
 cfn_stack_name="$APPLICATION_ID"-"$STAGE"-$appResourceName
@@ -13,10 +14,9 @@ export TF_VAR_stage=$STAGE
 export TF_VAR_aws_region=$AWS_DEFAULT_REGION
 export TF_VAR_application_id=$APPLICATION_ID
 #export TF_VAR_provisioning_role_arn=$PROVISIONING_ROLE
-export TF_VAR_batch_application_ecr_repo_url=$ECR_REPO_URL
-export TF_VAR_batch_application_ecr_repo_name=$ECR_REPO_NAME
-
-echo $GITHUB_TOKEN
+export TF_VAR_batch_job_ecr_repo_url=$ECR_REPO_URL
+export TF_VAR_batch_job_ecr_repo_name=$ECR_REPO_NAME
+export TF_VAR_batch_job_image_name=$IMAGE_TAG
 
 terraform init -backend-config="bucket=$TF_VAR_s3_backend_name" -backend-config="kms_key_id=$TF_VAR_s3_kms_key_id" -backend-config="region=$TF_VAR_aws_region" -backend-config="key=$TF_VAR_application_id/cicdAmi/$STAGE" .
 
