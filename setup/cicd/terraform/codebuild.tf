@@ -98,10 +98,14 @@ resource "aws_codebuild_project" "codebuild_project" {
     image                       = "aws/codebuild/standard:1.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
-
+    
     environment_variable {
-      STAGE  = "${var.stage}"
-      APPLICATION_ID = "${var.application_id}"
+      name  = "STAGE"
+      value = "${var.stage}"
+    }
+    environment_variable {
+      name  = "APPLICATION_ID"
+      value = "${var.application_id}"
     }
   }
 
