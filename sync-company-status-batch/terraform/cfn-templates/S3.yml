@@ -1,0 +1,119 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Template to create S3 Bucket with KMS server side encryption"
+
+Parameters:
+  ApplicationId:
+    Type: String
+  Environment:
+    Type: String
+    AllowedValues:
+      - prod
+      - test
+      - dev
+    Description: The environment name such as dev or test or prod to which resources are provisioned.
+    Default: "dev"
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID:
+                Ref: S3BucketKMSKey
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration:
+        Status: "Enabled"
+
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: S3Bucket
+      PolicyDocument:
+        Statement:
+          - Action:
+              - "s3:GetObject"
+            Effect: "Allow"
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:s3:::"
+                  - Ref: S3Bucket
+                  - "/*"
+            Principal:
+              AWS:
+                - Ref: AWS::AccountId
+          - Action:
+              - "s3:*"
+            Effect: "Allow"
+            Resource:
+              Fn::Join:
+                - ""
+                - - "arn:aws:s3:::"
+                  - Ref: S3Bucket
+                  - "/*"
+            Principal:
+              AWS:
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/SnappyTechTestProvisioningRole
+
+  S3BucketKMSKey:
+    Type: AWS::KMS::Key
+    Properties:
+      EnableKeyRotation: true
+      KeyPolicy:
+        Statement:
+          - Sid: Allow access for Key Users
+            Effect: "Allow"
+            Principal:
+              AWS:
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/SnappyTechTestProvisioningRole
+            Action: "kms:*"
+            Resource: "*"
+          - Sid: Allow access for Key Administrators
+            Effect: Allow
+            Principal:
+              AWS:
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
+                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/SnappyTechTestProvisioningRole
+            Action:
+              - kms:Create*
+              - kms:Describe*
+              - kms:Enable*
+              - kms:List*
+              - kms:Put*
+              - kms:Update*
+              - kms:Revoke*
+              - kms:Disable*
+              - kms:Get*
+              - kms:Delete*
+              - kms:TagResource
+              - kms:UntagResource
+              - kms:ScheduleKeyDeletion
+              - kms:CancelKeyDeletion
+            Resource: "*"
+
+  S3BucketKMSKeyAlias:
+    Type: AWS::KMS::Alias
+    Properties:
+      AliasName:
+        Fn::Sub: alias/${ApplicationId}/${Environment}/s3BucketKMSKey
+      TargetKeyId:
+        Ref: S3BucketKMSKey
+
+Outputs:
+  S3BucketName:
+    Value:
+      Ref: S3Bucket
+
+  S3BucketKMSKeyId:
+    Value:
+      Ref: S3BucketKMSKey
