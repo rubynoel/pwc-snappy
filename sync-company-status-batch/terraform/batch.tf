@@ -89,8 +89,8 @@ resource "aws_batch_job_definition" "batch_job_definition" {
 {
     "command": ["ls", "-la"],
     "image": "${var.batch_job_ecr_repo_url}/${var.batch_job_ecr_repo_name}:${var.batch_job_image_name}",
-    "memory": "${var.batch_job_memory}",
-    "vcpus": "${var.batch_job_vcpu}",
+    "memory": ${var.batch_job_memory},
+    "vcpus": ${var.batch_job_vcpu},
     "volumes": [
       {
         "host": {
