@@ -97,7 +97,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
             "Effect": "Allow",
             "Action": "ecr:GetAuthorizationToken",
             "Resource": "*"
-        } {
+        },{
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
