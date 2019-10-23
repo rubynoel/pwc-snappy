@@ -47,7 +47,3 @@ variable "git_branch" {
   default = "master"
 }
 
-
-variable "codebuild_image_uri" {
-  type = string
-}
