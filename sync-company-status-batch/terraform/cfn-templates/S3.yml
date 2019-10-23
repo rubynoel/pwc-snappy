@@ -4,9 +4,6 @@ Description: "Template to create S3 Bucket with KMS server side encryption"
 Parameters:
   ApplicationId:
     Type: String
-  RoleArn:
-    Type: String
-    Description: The arn of the role allowed access to the S3 bucket and associated KMS key
   Environment:
     Type: String
     AllowedValues:
@@ -64,8 +61,8 @@ Resources:
                   - Ref: S3Bucket
                   - "/*"
             Principal:
-              AWS:
-                - Ref: RoleArn
+              Service:
+                - codebuild.amazonaws.com
 
   S3BucketKMSKey:
     Type: AWS::KMS::Key
@@ -78,7 +75,8 @@ Resources:
             Principal:
               AWS:
                 - Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
-                - Ref: RoleArn
+              Service:
+                - codebuild.amazonaws.com
             Action: "kms:*"
             Resource: "*"
           - Sid: Allow access for Key Administrators
@@ -86,7 +84,8 @@ Resources:
             Principal:
               AWS:
                 - Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
-                - Ref: RoleArn
+              Service:
+                - codebuild.amazonaws.com
             Action:
               - kms:Create*
               - kms:Describe*
