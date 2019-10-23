@@ -68,9 +68,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
       "Action": [
         "ec2:*"
       ],
-      "Resource": [
-        "*"
-      ],
+      "Resource":  "*",
       "Condition": {
         "StringEquals": {
           "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"],
