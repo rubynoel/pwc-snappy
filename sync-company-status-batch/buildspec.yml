@@ -1,0 +1,12 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 8
+  build:
+    commands:
+      - echo "codebuild is running fimne"
+      - cd src && npm run build
+artifacts:
+  files:
+    - src

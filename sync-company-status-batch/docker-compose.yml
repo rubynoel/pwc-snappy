@@ -1,0 +1,10 @@
+version: "3"
+services:
+  batch:
+    build: .
+    volumes:
+      - .:/code
+    environment:
+      - STAGE
+      - AWS_REGION
+      - AWS_ACCOUNT_ID
