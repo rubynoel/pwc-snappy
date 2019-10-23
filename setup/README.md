@@ -19,10 +19,10 @@ TODO env.sh
 
 ## Executing the scripts
 
-From the root of the setup directory, execute the following
+From the root of the repository, execute the following
 
 ```
-sh setup.sh
+cd setup && sh setup.sh
 
 ```
 

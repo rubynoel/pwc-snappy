@@ -41,7 +41,7 @@ variable "batch_name" {
 
 variable "batch_compute_instance_type" {
   type = string
-  default = "t2.micro"
+  default = "optimal"
 }
 
 variable "batch_job_memory" {
