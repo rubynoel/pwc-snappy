@@ -61,8 +61,8 @@ Resources:
                   - Ref: S3Bucket
                   - "/*"
             Principal:
-              AWS:
-                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/SnappyTechTestProvisioningRole
+              Service:
+                - codebuild.amazonaws.com
 
   S3BucketKMSKey:
     Type: AWS::KMS::Key
@@ -75,7 +75,8 @@ Resources:
             Principal:
               AWS:
                 - Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
-                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/SnappyTechTestProvisioningRole
+              Service:
+                - codebuild.amazonaws.com
             Action: "kms:*"
             Resource: "*"
           - Sid: Allow access for Key Administrators
@@ -83,7 +84,8 @@ Resources:
             Principal:
               AWS:
                 - Fn::Sub: arn:aws:iam::${AWS::AccountId}:root
-                - Fn::Sub: arn:aws:iam::${AWS::AccountId}:role/SnappyTechTestProvisioningRole
+              Service:
+                - codebuild.amazonaws.com
             Action:
               - kms:Create*
               - kms:Describe*
