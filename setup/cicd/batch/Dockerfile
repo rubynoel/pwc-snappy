@@ -1,9 +1,23 @@
 FROM node:8.16.2-alpine
 
-RUN apk update
+RUN apk add --update bash \
+    python \
+    python-dev \
+    py-pip \
+    build-base \
+    zip \ 
+    unzip \
+    wget \
+    jq \
+    curl \
+    docker openrc \
+    terraform \
+    && pip install awscli --upgrade \
+    && apk --purge -v del py-pip \
+    && rm -rf /var/cache/apk/*
 
-RUN apk add --update zip unzip wget python3-pip jq curl
-
-RUN pip3 install awscli --upgrade
+RUN echo "Terraform installed" && terraform --version
 
 RUN echo "AWS CLI installed" && aws --version
+
+WORKDIR /code

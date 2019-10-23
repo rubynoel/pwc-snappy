@@ -97,11 +97,11 @@ resource "aws_codebuild_project" "codebuild_project" {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/standard:1.0"
     type                        = "LINUX_CONTAINER"
-    image_pull_credentials_type = "CODEBUILD"
+    image_pull_credentials_type = "SERVICE_ROLE"
 
     environment_variable {
-      name  = "SOME_KEY1"
-      value = "SOME_VALUE1"
+      STAGE  = "${var.stage}"
+      APPLICATION_ID = "${var.application_id}"
     }
   }
 
@@ -119,6 +119,7 @@ resource "aws_codebuild_project" "codebuild_project" {
 
   source {
     type            = "CODEPIPELINE"
+    buildspec       = "sync-company-status-batch/buildspec.yml"
   }
 
   vpc_config {
