@@ -6,6 +6,8 @@ phases:
   build:
     commands:
       - echo "codebuild is running fimne"
+      - pwd
+      - ls
       - cd src && npm run build
 artifacts:
   files:
