@@ -101,6 +101,12 @@
             "Resource": "arn:aws:kms:*:*:alias/${application_id}/*"
         },
         {
+            "Sid": "AllowKMSKeyActions",
+            "Effect": "Allow",
+            "Action": "kms:*",
+            "Resource": "*"
+        },
+        {
             "Sid": "VisualEditor2",
             "Effect": "Allow",
             "Action": [
