@@ -59,6 +59,6 @@ variable "rds_db_name" {
 }
 
 variable "rds_db_deletion_protection" {
-  type = boolean
+  type = bool
   default = false
 }
