@@ -17,6 +17,7 @@ export TF_VAR_application_id=$APPLICATION_ID
 export TF_VAR_batch_job_ecr_repo_url=$ECR_REPO_URL
 export TF_VAR_batch_job_ecr_repo_name=$ECR_REPO_NAME
 export TF_VAR_batch_job_image_name=$IMAGE_TAG
+export TF_VAR_batch_name=sync-company-status
 
 terraform init -backend-config="bucket=$TF_VAR_s3_backend_name" -backend-config="kms_key_id=$TF_VAR_s3_kms_key_id" -backend-config="region=$TF_VAR_aws_region" -backend-config="key=$TF_VAR_application_id/cicdAmi/$STAGE" .
 
