@@ -3,6 +3,7 @@ phases:
   install:
     runtime-versions:
       nodejs: 8
+      docker: 18
   build:
     commands:
       - echo "Install dependencies"
