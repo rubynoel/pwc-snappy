@@ -141,8 +141,8 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
             "Effect": "Allow",
             "Action": "s3:*",
             "Resource": [
-                "arn:aws:s3:::${var.application_id}-*/*",
-                "arn:aws:s3:::${var.application_id}-*"
+                "arn:aws:s3:::${var.application_id}*/*",
+                "arn:aws:s3:::${var.application_id}*"
             ]
         },
         {
@@ -188,7 +188,8 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
             "Action": "batch:*"
             "Resource": [
                 "arn:aws:batch:*:*:*/${var.application_id}*",
-                "arn:aws:batch:*:*:*/${var.application_id}*/*"
+                "arn:aws:batch:*:*:*/${var.application_id}*/*",
+                "arn:aws:batch:*:*:job-definition/${var.application_id}*:*"
             ]
         }
   ]
