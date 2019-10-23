@@ -97,6 +97,83 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
             "Effect": "Allow",
             "Action": "ecr:GetAuthorizationToken",
             "Resource": "*"
+        } {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Create*",
+                "kms:List*",
+                "kms:UntagResource",
+                "kms:Update*",
+                "kms:Get*",
+                "kms:Describe*",
+                "kms:CancelKeyDeletion",
+                "kms:Revoke*",
+                "kms:TagResource",
+                "kms:Disable*",
+                "kms:ScheduleKeyDeletion",
+                "kms:Delete*",
+                "kms:Enable*",
+                "kms:Put*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": "kms:*",
+            "Resource": "arn:aws:kms:*:*:alias/pwc-snappy/*"
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": [
+                "iam:Get*",
+                "iam:List*",
+                "iam:Create*"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::${var.application_id}-*/*",
+                "arn:aws:s3:::${var.application_id}-*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor4",
+            "Effect": "Allow",
+            "Action": "cloudformation:*",
+            "Resource": "arn:aws:cloudformation:*:*:stack/${var.application_id}-*/*"
+        }, {
+            "Sid": "AllowIAMActionsForSnappyByResourceName",
+            "Effect": "Allow",
+            "Action": "iam:*",
+            "Resource": [
+                "arn:aws:iam::*:policy/${var.application_id}*",
+                "arn:aws:iam::*:role/${var.application_id}*",
+                "arn:aws:iam::*:role/${var.application_id}*/*",
+                "arn:aws:iam::*:policy/${var.application_id}*/*"
+            ]
+        }
+            "Sid": "AllowSSMActionsForSnappy",
+            "Effect": "Allow",
+            "Action": "ssm:*",
+            "Resource": [
+                "arn:aws:ssm:*:*:parameter/${var.application_id}",
+                "arn:aws:ssm:*:*:parameter/${var.application_id}/*"
+            ]
+        },
+        {
+            "Sid": "AllowSSMRead",
+            "Effect": "Allow",
+            "Action": "ssm:Describe*",
+            "Resource": "*"
         }
   ]
 }
