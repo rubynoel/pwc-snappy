@@ -142,7 +142,7 @@
                 "arn:aws:iam::*:role/${application_id}*",
                 "arn:aws:iam::*:role/${application_id}*/*",
                 "arn:aws:iam::*:policy/${application_id}*/*",
-                "arn:aws:iam::*:instance-profile/${application_id}*",
+                "arn:aws:iam::*:instance-profile/${application_id}*"
             ]
         },{
             "Sid": "AllowSSMActionsForSnappy",
