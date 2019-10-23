@@ -37,6 +37,17 @@ variable "git_org_name" {
   default = "rubynoel"
 }
 
+variable "git_repo_name" {
+  type = string
+  default = "pwc-snappy"
+}
+
+variable "git_branch" {
+  type = string
+  default = "master"
+}
+
+
 variable "batch_application_ecr_repo_url" {
   type = string
 }
@@ -44,4 +55,3 @@ variable "batch_application_ecr_repo_url" {
 variable "batch_application_ecr_repo_name" {
   type = string
 }
-
