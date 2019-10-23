@@ -80,7 +80,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
         "ec2:*"
       ],
       "Resource": "*"
-      ]
+      
     }
   ]
 }
