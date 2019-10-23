@@ -18,183 +18,21 @@ EOF
   tags = local.common_tags
 }
 
+data "template_file" "codebuild_role_policy_doc" {
+  template = "${file("${path.module}/templates/codebuild-role-policy.tpl")}"
+
+  vars  = {
+    application_id = "${var.application_id}"
+    stage = "${var.stage}"
+    vpc_arn = "arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"
+    codepipeline_bucket_arn = "${aws_s3_bucket.codepipeline_bucket.arn}"
+  }
+}
+
 resource "aws_iam_role_policy" "codebuild_role_policy" {
   role = "${aws_iam_role.codebuild_role.name}"
   name = "${local.cicd_name_prefix}-codebuild-policy"
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Resource": [
-        "*"
-      ],
-      "Action": [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ]
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateNetworkInterface",
-        "ec2:DescribeDhcpOptions",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DeleteNetworkInterface",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeVpcs"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:CreateNetworkInterfacePermission"
-      ],
-      "Resource": [
-        "arn:aws:ec2:*:*:network-interface/*"
-      ],
-      "Condition": {
-        "StringEquals": {
-          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"]
-        }
-      }
-    },{
-      "Effect": "Allow",
-      "Action": [
-        "ec2:*"
-      ],
-      "Resource":  "*",
-      "Condition": {
-        "StringLike": {
-          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"]
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "s3:*"
-      ],
-      "Resource": [
-        "${aws_s3_bucket.codepipeline_bucket.arn}",
-        "${aws_s3_bucket.codepipeline_bucket.arn}/*"
-      ]
-    },{
-            "Sid": "AllowECRActions",
-            "Effect": "Allow",
-            "Action": "ecr:*",
-            "Resource": [
-                "arn:aws:ecr:*:*:repository/${var.application_id}-*",
-                "arn:aws:ecr:*:*:repository/${var.application_id}-*/*"
-            ]
-        },
-        {
-            "Sid": "AllowECRGetAuthorizationToken",
-            "Effect": "Allow",
-            "Action": "ecr:GetAuthorizationToken",
-            "Resource": "*"
-        },{
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "kms:Create*",
-                "kms:List*",
-                "kms:UntagResource",
-                "kms:Update*",
-                "kms:Get*",
-                "kms:Describe*",
-                "kms:CancelKeyDeletion",
-                "kms:Revoke*",
-                "kms:TagResource",
-                "kms:Disable*",
-                "kms:ScheduleKeyDeletion",
-                "kms:Delete*",
-                "kms:Enable*",
-                "kms:Put*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "VisualEditor1",
-            "Effect": "Allow",
-            "Action": "kms:*",
-            "Resource": "arn:aws:kms:*:*:alias/pwc-snappy/*"
-        },
-        {
-            "Sid": "VisualEditor2",
-            "Effect": "Allow",
-            "Action": [
-                "iam:Get*",
-                "iam:List*",
-                "iam:Create*"
-            ],
-            "Resource": [
-                "*"
-            ]
-        },
-        {
-            "Sid": "VisualEditor3",
-            "Effect": "Allow",
-            "Action": "s3:*",
-            "Resource": [
-                "arn:aws:s3:::${var.application_id}*/*",
-                "arn:aws:s3:::${var.application_id}*"
-            ]
-        },
-        {
-            "Sid": "VisualEditor4",
-            "Effect": "Allow",
-            "Action": "cloudformation:*",
-            "Resource": "arn:aws:cloudformation:*:*:stack/${var.application_id}-*/*"
-        }, 
-        {
-            "Sid": "AllowIAMActionsForSnappyByResourceName",
-            "Effect": "Allow",
-            "Action": "iam:*",
-            "Resource": [
-                "arn:aws:iam::*:policy/${var.application_id}*",
-                "arn:aws:iam::*:role/${var.application_id}*",
-                "arn:aws:iam::*:role/${var.application_id}*/*",
-                "arn:aws:iam::*:policy/${var.application_id}*/*"
-            ]
-        },{
-            "Sid": "AllowSSMActionsForSnappy",
-            "Effect": "Allow",
-            "Action": "ssm:*",
-            "Resource": [
-                "arn:aws:ssm:*:*:parameter/${var.application_id}",
-                "arn:aws:ssm:*:*:parameter/${var.application_id}/*"
-            ]
-        },
-        {
-            "Sid": "AllowSSMRead",
-            "Effect": "Allow",
-            "Action": "ssm:Describe*",
-            "Resource": "*"
-        },
-        {
-            "Sid": "AllowBatchRead",
-            "Effect": "Allow",
-            "Action": ["batch:Describe*","batch:List*"]
-            "Resource": "*"
-        },
-        {
-            "Sid": "AllowBatchWrite",
-            "Effect": "Allow",
-            "Action": "batch:*"
-            "Resource": [
-                "arn:aws:batch:*:*:*/${var.application_id}*",
-                "arn:aws:batch:*:*:*/${var.application_id}*/*",
-                "arn:aws:batch:*:*:job-definition/${var.application_id}*:*"
-            ]
-        }
-  ]
-}
-POLICY
+  policy = "${data.template_file.codebuild_role_policy_doc.rendered}"
 }
 
 resource "aws_codebuild_project" "codebuild_project" {
