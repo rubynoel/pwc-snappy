@@ -101,6 +101,12 @@
             "Resource": "arn:aws:kms:*:*:alias/${application_id}/*"
         },
         {
+            "Sid": "AllowKMSKeyActions",
+            "Effect": "Allow",
+            "Action": "kms:*",
+            "Resource": "*"
+        },
+        {
             "Sid": "VisualEditor2",
             "Effect": "Allow",
             "Action": [
@@ -135,7 +141,8 @@
                 "arn:aws:iam::*:policy/${application_id}*",
                 "arn:aws:iam::*:role/${application_id}*",
                 "arn:aws:iam::*:role/${application_id}*/*",
-                "arn:aws:iam::*:policy/${application_id}*/*"
+                "arn:aws:iam::*:policy/${application_id}*/*",
+                "arn:aws:iam::*:instance-profile/${application_id}*"
             ]
         },{
             "Sid": "AllowSSMActionsForSnappy",
@@ -153,9 +160,9 @@
             "Resource": "*"
         },
         {
-            "Sid": "AllowBatchRead",
+            "Sid": "AllowBatchActions",
             "Effect": "Allow",
-            "Action": ["batch:Describe*","batch:List*"],
+            "Action": ["batch:Describe*","batch:List*","batch:CreateComputeEnvironment"],
             "Resource": "*"
         },
         {

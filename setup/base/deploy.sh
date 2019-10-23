@@ -19,9 +19,6 @@ export TF_VAR_stage=$STAGE
 export TF_VAR_aws_region=$AWS_DEFAULT_REGION
 export TF_VAR_application_id=$APPLICATION_ID
 export TF_VAR_provisioning_role_arn=$PROVISIONING_ROLE
-export TF_VAR_github_token=$GITHUB_TOKEN
-
-echo $GITHUB_TOKEN
 
 terraform init -backend-config="bucket=$TF_VAR_s3_backend_name" -backend-config="kms_key_id=$TF_VAR_s3_kms_key_id" -backend-config="region=$TF_VAR_aws_region" -backend-config="key=$TF_VAR_application_id/cicdAmi/$STAGE" -backend-config="role_arn=$PROVISIONING_ROLE" ./terraform
 

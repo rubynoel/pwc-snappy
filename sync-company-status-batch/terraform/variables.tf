@@ -41,7 +41,7 @@ variable "batch_name" {
 
 variable "batch_compute_instance_type" {
   type = string
-  default = "t2.micro"
+  default = "optimal"
 }
 
 variable "batch_job_memory" {
@@ -52,4 +52,13 @@ variable "batch_job_memory" {
 variable "batch_job_vcpu" {
   type = number
   default = 1
+}
+
+variable "rds_db_name" {
+  type = string
+}
+
+variable "rds_db_deletion_protection" {
+  type = boolean
+  default = false
 }
