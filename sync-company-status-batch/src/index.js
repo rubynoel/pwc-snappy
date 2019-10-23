@@ -13,4 +13,4 @@ const syncCompanyStatus = async () => {
   console.log("Running batch..");
 };
 
-exports.syncCompanyStatus = syncCompanyStatus;
+syncCompanyStatus();

@@ -5,7 +5,7 @@
       "Action": "sts:AssumeRole",
       "Principal": {
         "Service": ["ec2.amazonaws.com"],
-        "AWS": ["arn:aws:iam::142410210152:role/ec2-basic-ro-role"]
+        "AWS": ["arn:aws:iam::123456789:role/ec2-basic-ro-role"]
       },
       "Effect": "Allow",
       "Sid": ""

@@ -7,7 +7,11 @@ This folder contains scripts needed to provision the day zero dependencies for S
 An AWS EC2 instance with Docker installed:
 Login to the instance to execute the setup scripts in this repository. The instance must be configured with an instance profile with the permissions as listed in _provisioning-role-policy.json_. Refer [EC2 Provisioning Instance Role](#EC2-Provisioning-Instance-Role) section to set this up.
 
-**Note**: The scripts will detect the AWS account id from the EC2 instance metadata and provision resources in this account. If you wish to provision the resources in a different account, the scripts need to be modified to use a cross account role in target account that is assumable by this instance to provision resources in the target account.
+**Note**: The scripts will detect the AWS account id from the EC2 instance metadata and provision resources in this account.
+
+- If you wish to provision the resources in a different account, the scripts need to be modified to use a cross account role in target account that is assumable by this instance to provision resources in the target account.
+
+- If you wish to execute the scripts from outside AWS, the scripts need to be modified to pass the AWS account id to it instead of inferring the account id from the ec2 metadata url. Also the user/role used to execute the scripts must be granted permission to assume the provisioning role.
 
 ## GitHub Personal Access Token ......................
 
