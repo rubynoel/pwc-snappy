@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 
-source ./util.sh
-
-#Push build container images to ecr for use in ci pipeline
-build_image_and_push_to_ecr "sync-company-status-batch" "./src"
-
 # Create/Update the terraform remote backend
 local appResourceName=company-status-sync
 local cfn_stack_name="$APPLICATION_ID"-"$STAGE"-$appResourceName
-local provision_terraform_backend $cfn_stack_name $APPLICATION_ID-$appResourceName
+aws cloudformation deploy --template-file ./cfn-templates/S3.yml --parameter-overrides ApplicationId=$APPLICATION_ID-$appResourceName --stack-name $cfn_stack_name
 local stack_output=$(aws cloudformation describe-stacks --stack-name $cfn_stack_name)
 
 export TF_VAR_s3_kms_key_id=$(echo $stack_output | jq --raw-output '.Stacks[0].Outputs[0].OutputValue')
@@ -22,9 +17,9 @@ export TF_VAR_github_token=$GITHUB_TOKEN
 
 echo $GITHUB_TOKEN
 
-terraform init -backend-config="bucket=$TF_VAR_s3_backend_name" -backend-config="kms_key_id=$TF_VAR_s3_kms_key_id" -backend-config="region=$TF_VAR_aws_region" -backend-config="key=$TF_VAR_application_id/cicdAmi/$STAGE" ./terraform
+terraform init -backend-config="bucket=$TF_VAR_s3_backend_name" -backend-config="kms_key_id=$TF_VAR_s3_kms_key_id" -backend-config="region=$TF_VAR_aws_region" -backend-config="key=$TF_VAR_application_id/cicdAmi/$STAGE" .
 
-terraform plan -out=./tfplan ./terraform
+terraform plan -out=./tfplan .
 
 #--auto-approve
 terraform apply ./tfplan

@@ -47,3 +47,11 @@ variable "git_branch" {
   default = "master"
 }
 
+
+variable "batch_application_ecr_repo_url" {
+  type = string
+}
+
+variable "batch_application_ecr_repo_name" {
+  type = string
+}

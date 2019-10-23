@@ -21,6 +21,8 @@ export TF_VAR_aws_region=$AWS_DEFAULT_REGION
 export TF_VAR_application_id=$APPLICATION_ID
 export TF_VAR_provisioning_role_arn=$PROVISIONING_ROLE
 export TF_VAR_github_token=$GITHUB_TOKEN
+export TF_VAR_batch_application_ecr_repo_url=$ECR_REPO_URL
+export TF_VAR_batch_application_ecr_repo_name=$ECR_REPO_NAME
 
 echo $GITHUB_TOKEN
 

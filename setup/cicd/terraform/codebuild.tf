@@ -59,8 +59,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
       ],
       "Condition": {
         "StringEquals": {
-          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"],
-          "ec2:AuthorizedService": "codebuild.amazonaws.com"
+          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"]
         }
       }
     },{
@@ -68,13 +67,10 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
       "Action": [
         "ec2:*"
       ],
-      "Resource": [
-        "*"
-      ],
+      "Resource":  "*",
       "Condition": {
-        "StringEquals": {
-          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"],
-          "ec2:AuthorizedService": "codebuild.amazonaws.com"
+        "StringLike": {
+          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"]
         }
       }
     },
@@ -87,7 +83,21 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
         "${aws_s3_bucket.codepipeline_bucket.arn}",
         "${aws_s3_bucket.codepipeline_bucket.arn}/*"
       ]
-    }
+    },{
+            "Sid": "AllowECRActions",
+            "Effect": "Allow",
+            "Action": "ecr:*",
+            "Resource": [
+                "arn:aws:ecr:*:*:repository/${var.application_id}-*",
+                "arn:aws:ecr:*:*:repository/${var.application_id}-*/*"
+            ]
+        },
+        {
+            "Sid": "AllowECRGetAuthorizationToken",
+            "Effect": "Allow",
+            "Action": "ecr:GetAuthorizationToken",
+            "Resource": "*"
+        }
   ]
 }
 POLICY
@@ -120,6 +130,14 @@ resource "aws_codebuild_project" "codebuild_project" {
     environment_variable {
       name  = "APPLICATION_ID"
       value = "${var.application_id}"
+    }
+    environment_variable {
+      name  = "ECR_REPO_URL"
+      value = "${var.batch_application_ecr_repo_url}"
+    }
+    environment_variable {
+      name  = "ECR_REPO_NAME"
+      value = "${var.batch_application_ecr_repo_name}"
     }
   }
 
