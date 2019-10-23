@@ -59,8 +59,7 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
       ],
       "Condition": {
         "StringEquals": {
-          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"],
-          "ec2:AuthorizedService": "codebuild.amazonaws.com"
+          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"]
         }
       }
     },{
@@ -70,9 +69,8 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
       ],
       "Resource":  "*",
       "Condition": {
-        "StringEquals": {
-          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"],
-          "ec2:AuthorizedService": "codebuild.amazonaws.com"
+        "StringLike": {
+          "ec2:Vpc": ["arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"]
         }
       }
     },
