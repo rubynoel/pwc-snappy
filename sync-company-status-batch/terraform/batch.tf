@@ -99,7 +99,7 @@ resource "aws_batch_compute_environment" "batch_compute_env" {
     ]
 
     #parameterize vcpus
-    max_vcpus = 1
+    max_vcpus = 2
     min_vcpus = 0
     desired_vcpus = 1
 
