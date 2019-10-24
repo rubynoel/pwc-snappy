@@ -27,5 +27,6 @@ $(get_ssm_parameter "$SSM_KEY_DB_NAME") && export PGDATABASE=$?
 $(get_ssm_parameter "$SSM_KEY_DB_PORT") && export PGPORT=$?
 export PGDBSCHEMA=public
 
-#node node_modules/db-migrate/bin/db-migrate
+node node_modules/db-migrate/bin/db-migrate up
 node index.js
+echo "Job exit code is "$?
