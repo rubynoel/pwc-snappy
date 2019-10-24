@@ -8,7 +8,7 @@ module "rds_postgres" {
   identifier = "${local.db_name_prefix}-company-db"
 
   engine            = "postgres"
-  engine_version    = "9.6.9"
+  engine_version    = "11.5"
   instance_class    = "db.t2.micro"
   allocated_storage = 5
   storage_encrypted = false
