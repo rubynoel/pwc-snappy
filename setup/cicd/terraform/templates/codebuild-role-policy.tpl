@@ -178,8 +178,19 @@
         {
             "Sid": "AllowRDSActions",
             "Effect": "Allow",
-            "Action": "rds:*",
+            "Action": "rds:Describe*",
             "Resource": "*"
+        },
+        {
+            "Sid": "AllowRDSActions",
+            "Effect": "Allow",
+            "Action": "rds:*",
+            "Resource": [
+              "arn:aws:rds:*:*:db:${application_id}*",
+              "arn:aws:rds:*:*:og:${application_id}*",
+              "arn:aws:rds:*:*:pg:${application_id}*",
+              "arn:aws:rds:*:*:subgrp:${application_id}*"
+            ]
         }
   ]
 }
