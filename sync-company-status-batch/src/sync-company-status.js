@@ -6,8 +6,14 @@ const pool = new Pool();
 const syncCompanyStatus = async () => {
   const client = await pool.connect();
   try {
+    // Create a temp table that exists only for the duration of the transaction to use as a staging table
+    const createTmpTableQuery =
+      'CREATE TEMP TABLE tmp_company_master(name varchar(80), tagline	varchar(80), email varchar(80), business_number varchar(80), restricted_flag boolean)';
+    const createTmpTableQueryRes = await client.query(createTmpTableQuery);
+    console.log(`Temp table created ${createTmpTableQuery}`);
+
     const importToTmpTableQuery =
-      "SELECT aws_s3.table_import_from_s3('company_master','', '(format csv)',:'s3_uri')"; //eslint-disable-line
+      "SELECT aws_s3.table_import_from_s3('tmp_company_master','', '(format csv)',:'s3_uri')"; //eslint-disable-line
     const importToTmpTableQueryRes = await client.query(importToTmpTableQuery);
     console.log(`Response from db is ${importToTmpTableQueryRes}`);
     /* await client.query('BEGIN');
