@@ -5,7 +5,7 @@ locals {
 module "rds_postgres" {
   source  = "terraform-aws-modules/rds/aws"
 
-  identifier = "${local.db_name_prefix}-db"
+  identifier = "${local.db_name_prefix}-company-db"
 
   engine            = "postgres"
   engine_version    = "9.6.9"
