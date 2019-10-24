@@ -18,7 +18,7 @@ module "rds_postgres" {
   password = "${var.rds_password}"
   port     = "5432"
 
-  vpc_security_group_ids = ["${data.aws_security_group.default.id}"]
+  vpc_security_group_ids = ["${data.aws_ssm_parameter.default_security_group_id.value}"]
 
   #TODO: parameterize this
   maintenance_window = "Mon:00:00-Mon:03:00"
