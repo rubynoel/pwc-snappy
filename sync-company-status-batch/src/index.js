@@ -12,15 +12,14 @@ const ssm = new AWS.SSM();
 const processJob = async () => {
   console.log(`Running batch..${process.env['RESOURCE_REGION']}`);
 
-  jobProcessor.syncCompanyStatus(
-      (dbConfig = {
-        user: await getSSMParameter(process.env['SSM_KEY_DB_USER']),
-        password: await getSSMParameter(process.env['SSM_KEY_DB_PASSWORD']),
-        database: await getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
-        host: await getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
-        port: await getSSMParameter(process.env['SSM_KEY_DB_PORT']),
-      })
-  );
+  var dbConfig = {
+    user: await getSSMParameter(process.env['SSM_KEY_DB_USER']),
+    password: await getSSMParameter(process.env['SSM_KEY_DB_PASSWORD']),
+    database: await getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
+    host: await getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
+    port: await getSSMParameter(process.env['SSM_KEY_DB_PORT']),
+  };
+  jobProcessor.syncCompanyStatus(dbConfig);
 };
 
 const getSSMParameter = (name) => {
