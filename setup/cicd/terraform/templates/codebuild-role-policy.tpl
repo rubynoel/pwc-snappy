@@ -176,7 +176,7 @@
             ]
         },
         {
-            "Sid": "AllowRDSActions",
+            "Sid": "AllowRDSReadActions",
             "Effect": "Allow",
             "Action": "rds:Describe*",
             "Resource": "*"
