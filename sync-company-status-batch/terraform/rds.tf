@@ -40,7 +40,7 @@ module "rds_postgres" {
   major_engine_version = "9.6"
 
   # Snapshot name upon DB deletion
-  final_snapshot_identifier = "${local.db_name_prefix}-db-final-snap                                                                                                                                                                                                           "
+  final_snapshot_identifier = "${local.db_name_prefix}-db-final-snap"                                                                                                                                                                                                         "
 
   # Database Deletion Protection
   deletion_protection = var.rds_db_deletion_protection
