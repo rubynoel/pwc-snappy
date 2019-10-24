@@ -12,6 +12,7 @@
   "dependencies": {
     "aws-sdk": "^2.554.0",
     "db-migrate": "^0.11.6",
+    "db-migrate-pg": "^1.0.0",
     "pg": "^7.12.1"
   },
   "devDependencies": {
