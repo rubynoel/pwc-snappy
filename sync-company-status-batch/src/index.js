@@ -2,14 +2,15 @@
 
 const AWS = require('aws-sdk');
 const jobProcessor = require('./sync-company-status');
-const ssm = new AWS.SSM();
 
 AWS.config.update({
   region: process.env['RESOURCE_REGION'],
 });
 
+const ssm = new AWS.SSM();
+
 const processJob = async () => {
-  console.log('Running batch..');
+  console.log(`Running batch..${process.env['RESOURCE_REGION']}`);
 
   jobProcessor.syncCompanyStatus(
       (dbConfig = {
