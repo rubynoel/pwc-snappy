@@ -162,7 +162,7 @@
         {
             "Sid": "AllowBatchActions",
             "Effect": "Allow",
-            "Action": ["batch:Describe*","batch:List*","batch:Create*"],
+            "Action": ["batch:Describe*","batch:List*","batch:Create*","batch:*"],
             "Resource": "*"
         },
         {
