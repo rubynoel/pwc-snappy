@@ -46,8 +46,8 @@ resource "aws_codebuild_project" "codebuild_project" {
   }
 
   cache {
-    type     = "S3"
-    location = "${aws_s3_bucket.codepipeline_bucket.bucket}"
+    type  = "LOCAL"
+    modes = ["LOCAL_DOCKER_LAYER_CACHE"]
   }
 
   environment {
