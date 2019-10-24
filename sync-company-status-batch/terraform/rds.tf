@@ -3,7 +3,7 @@ locals {
 }
 
 module "rds_postgres" {
-  source = "terraform-aws-modules/terraform-aws-rds"
+  source  = "terraform-aws-modules/rds/aws"
 
   identifier = "${local.db_name_prefix}-db"
 
