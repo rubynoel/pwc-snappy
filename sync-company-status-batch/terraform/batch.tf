@@ -92,7 +92,7 @@ resource "aws_batch_compute_environment" "batch_compute_env" {
   compute_environment_name = "${local.batch_name_prefix}-env"
   
   compute_resources {
-    instance_role = "${aws_iam_role.ecs_instance_role.arn}"
+    instance_role = "${aws_iam_instance_profile.ecs_instance_role.arn}"
 
     instance_type = [
       "${var.batch_compute_instance_type}",
@@ -125,7 +125,7 @@ resource "aws_batch_job_definition" "batch_job_definition" {
 {
     "command": ["ls", "-la"],
     "image": "${var.batch_job_ecr_repo_url}/${var.batch_job_ecr_repo_name}:${var.batch_job_image_name}",
-    "jobRoleArn": "",
+    "jobRoleArn": "${aws_iam_role.job_container_task_role.arn}",
     "memory": ${var.batch_job_memory},
     "vcpus": ${var.batch_job_vcpu},
     "volumes": [
