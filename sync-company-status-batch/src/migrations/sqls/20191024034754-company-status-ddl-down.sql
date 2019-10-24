@@ -1,1 +1,1 @@
-/* Replace with your SQL commands */
+DROP TABLE company_master;

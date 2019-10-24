@@ -179,7 +179,7 @@
             "Sid": "AllowRDSActions",
             "Effect": "Allow",
             "Action": "rds:*",
-            "Resource": ["arn:aws:rds:*:*:*:${application_id}*"]
+            "Resource": "*"
         }
   ]
 }
