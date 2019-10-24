@@ -62,3 +62,14 @@ variable "rds_db_deletion_protection" {
   type = bool
   default = false
 }
+
+variable "rds_username" {
+  type = string
+  default = "rdssystemuser"
+}
+
+variable "rds_password" {
+  type = string
+  default = "ChangePasswordAsap1*"
+}
+

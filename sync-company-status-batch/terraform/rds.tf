@@ -14,11 +14,11 @@ module "rds_postgres" {
   storage_encrypted = false
   name = "${var.rds_db_name}"
 
-  username = "${var.db_username}"
-  password = "${var.db_password}"
+  username = "${var.rds_username}"
+  password = "${var.rds_password}"
   port     = "5432"
 
-  vpc_security_group_ids = ["${data.aws_security_group.default.id}"]
+  vpc_security_group_ids = ["${data.aws_ssm_parameter.default_security_group_id.value}"]
 
   #TODO: parameterize this
   maintenance_window = "Mon:00:00-Mon:03:00"
