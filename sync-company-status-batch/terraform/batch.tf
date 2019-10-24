@@ -143,7 +143,9 @@ resource "aws_batch_job_definition" "batch_job_definition" {
       {"name": "SSM_KEY_DB_NAME", "value": "${aws_ssm_parameter.rds_postgres_database_name.name}"},
       {"name": "SSM_KEY_DB_PORT", "value": "${aws_ssm_parameter.rds_postgres_database_port.name}"},
       {"name": "SSM_KEY_DB_USER", "value": "${aws_ssm_parameter.rds_postgres_username.name}"},
-      {"name": "SSM_KEY_DB_PASSWORD", "value": "${aws_ssm_parameter.rds_postgres_password.name}"}
+      {"name": "SSM_KEY_DB_PASSWORD", "value": "${aws_ssm_parameter.rds_postgres_password.name}"},
+      {"name": "COMPANY_DATA_BUCKET", "value": "${var.company_data_bucket}"},
+      {"name": "COMPANY_DATA_FILE_OBJECT_KEY", "value": "${var.company_data_file_object_key}"}
     ],
     "mountPoints": [
         {

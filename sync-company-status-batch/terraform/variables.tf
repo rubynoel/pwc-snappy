@@ -73,3 +73,11 @@ variable "rds_password" {
   default = "ChangePasswordAsap1*"
 }
 
+variable "company_data_bucket" {
+  type = string
+}
+
+variable "company_data_file_object_key" {
+  type = string
+}
+

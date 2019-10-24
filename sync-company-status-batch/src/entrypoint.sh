@@ -33,6 +33,6 @@ export PGPORT=$(aws ssm get-parameter --name $SSM_KEY_DB_PORT --with-decryption 
 export PGDBSCHEMA=public
 
 echo PGHOST is $PGHOST
-node node_modules/db-migrate/bin/db-migrate up
+node node_modules/db-migrate/bin/db-migrate up --config ./db/config/database.json --env thisEnv --migrations-dir ./db/migrations
 node index.js
 echo "Job exit code is "$?

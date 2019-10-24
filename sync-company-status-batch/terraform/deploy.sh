@@ -13,12 +13,14 @@ export TF_VAR_aws_account_id=$AWS_ACCOUNT_ID
 export TF_VAR_stage=$STAGE
 export TF_VAR_aws_region=$AWS_DEFAULT_REGION
 export TF_VAR_application_id=$APPLICATION_ID
-#export TF_VAR_provisioning_role_arn=$PROVISIONING_ROLE
 export TF_VAR_batch_job_ecr_repo_url=$ECR_REPO_URL
 export TF_VAR_batch_job_ecr_repo_name=$ECR_REPO_NAME
 export TF_VAR_batch_job_image_name=$IMAGE_TAG
 export TF_VAR_batch_name=sync-company-status
 export TF_VAR_rds_db_name=SnappyDB
+# TODO: use a different bucket for company status sync batch job
+export TF_VAR_company_data_bucket=$TF_VAR_s3_backend_name
+export TF_VAR_company_data_file_object_key=/company_status_data/DataFile
 
 echo "Terraform backend is"$TF_VAR_s3_backend_name
 terraform init -backend-config="bucket=$TF_VAR_s3_backend_name" -backend-config="kms_key_id=$TF_VAR_s3_kms_key_id" -backend-config="region=$TF_VAR_aws_region" -backend-config="key=$TF_VAR_application_id/cicdAmi/$STAGE" .
