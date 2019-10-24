@@ -23,17 +23,18 @@ const processJob = async () => {
 };
 
 const getSSMParameter = (name) => {
-  return ssm
-      .getParameter({
-        Name: `${name}`,
-        WithDecryption: true,
-      })
-      .promise()
-      .then((data) =>
-      data.Parameter ?
-        data.Parameter.Value :
-        Promise.reject(new Error(`SSM Parameter ${name} is not set.`))
-      )
-      .promise();
+  return new Promise((resolve, reject) => {
+    ssm
+        .getParameter({
+          Name: `${name}`,
+          WithDecryption: true,
+        })
+        .promise()
+        .then((data) =>
+        data.Parameter ?
+          resolve(data.Parameter.Value) :
+          reject(new Error(`SSM Parameter ${name} is not set.`))
+        );
+  });
 };
 processJob();
