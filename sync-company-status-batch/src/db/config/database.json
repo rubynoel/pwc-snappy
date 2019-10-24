@@ -1,10 +1,10 @@
 {
   "thisEnv": {
     "driver": "pg",
-    "user": { "ENV": "DB_USERNAME" },
-    "password": { "ENV": "DB_PASSWORD" },
-    "host": { "ENV": "DB_HOST" },
-    "database": { "ENV": "DB_NAME" },
-    "schema": { "ENV": "DB_SCHEMA" }
+    "user": { "ENV": "PGUSER" },
+    "password": { "ENV": "PGPASSWORD" },
+    "host": { "ENV": "PGHOST" },
+    "database": { "ENV": "PGDATABASE" },
+    "schema": { "ENV": "PGDBSCHEMA" }
   }
 }
