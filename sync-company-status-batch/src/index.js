@@ -13,8 +13,8 @@ const processJob = () => {
 
   jobProcessor.syncCompanyStatus(
       (dbConfig = {
-        user: getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
-        password: getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
+        user: getSSMParameter(process.env['SSM_KEY_DB_USER']),
+        password: getSSMParameter(process.env['SSM_KEY_DB_PASSWORD']),
         database: getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
         host: getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
         port: getSSMParameter(process.env['SSM_KEY_DB_PORT']),
