@@ -79,8 +79,6 @@ data "template_file" "job_container_task_role_policy_doc" {
   vars  = {
     application_id = "${var.application_id}"
     stage = "${var.stage}"
-    vpc_arn = "arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"
-    codepipeline_bucket_arn = "${aws_s3_bucket.codepipeline_bucket.arn}"
   }
 }
 
