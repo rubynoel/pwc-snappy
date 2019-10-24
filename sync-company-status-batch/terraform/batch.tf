@@ -99,7 +99,7 @@ resource "aws_batch_compute_environment" "batch_compute_env" {
     ]
 
     #parameterize vcpus
-    max_vcpus = 48
+    max_vcpus = 5
     min_vcpus = 0
 
     security_group_ids = [
