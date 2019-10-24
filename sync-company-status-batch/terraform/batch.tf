@@ -84,7 +84,7 @@ data "template_file" "job_container_task_role_policy_doc" {
 
 resource "aws_iam_role_policy" "job_container_task_role_policy" {
   role = "${aws_iam_role.job_container_task_role.name}"
-  name = "${local.cicd_name_prefix}-job-ecs-task-policy"
+  name = "${local.batch_name_prefix}-job-ecs-task-policy"
   policy = "${data.template_file.job_container_task_role_policy_doc.rendered}"
 }
 
