@@ -98,8 +98,9 @@ resource "aws_batch_compute_environment" "batch_compute_env" {
       "${var.batch_compute_instance_type}",
     ]
 
+    # parameterize vcpus
     max_vcpus = 1
-    min_vcpus = 0
+    min_vcpus = 1
 
     security_group_ids = [
       "${data.aws_ssm_parameter.default_security_group_id.value}" #TODO: Create a separate security group
