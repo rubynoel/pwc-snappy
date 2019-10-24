@@ -34,10 +34,10 @@ module "rds_postgres" {
 
   # DB parameter group.
   #TODO: parameterize this
-  family = "postgres9.6"
+  family = "postgres11.5"
 
   # DB option group
-  major_engine_version = "9.6"
+  major_engine_version = "11.5"
 
   #Database Deletion Protection
   deletion_protection = var.rds_db_deletion_protection
