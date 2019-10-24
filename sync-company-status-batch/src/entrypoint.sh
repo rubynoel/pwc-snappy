@@ -26,4 +26,5 @@ export DB_PASSWORD=$(get_ssm_parameter "$SSM_KEY_DB_PASSWORD")
 export DB_NAME=$(get_ssm_parameter "$SSM_KEY_DB_NAME")
 export DB_PORT=$(get_ssm_parameter "$SSM_KEY_DB_PORT")
 
+#node node_modules/db-migrate/bin/db-migrate
 node index.js

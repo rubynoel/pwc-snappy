@@ -174,6 +174,12 @@
                 "arn:aws:batch:*:*:*/${application_id}*/*",
                 "arn:aws:batch:*:*:job-definition/${application_id}*:*"
             ]
+        },
+        {
+            "Sid": "AllowRDSActions",
+            "Effect": "Allow",
+            "Action": "rds:*",
+            "Resource": ["arn:aws:rds:*:*:*:${application_id}*"]
         }
   ]
 }
