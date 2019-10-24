@@ -92,7 +92,7 @@ resource "aws_batch_compute_environment" "batch_compute_env" {
   compute_environment_name = "${local.batch_name_prefix}-env"
   
   compute_resources {
-    instance_role = "${aws_iam_instance_profile.ecs_instance_role.arn}"
+    instance_role = "${aws_iam_role.ecs_instance_role.arn}"
 
     instance_type = [
       "${var.batch_compute_instance_type}",
