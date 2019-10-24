@@ -36,7 +36,7 @@ phases:
       - echo "Running terraform format..."
       - terraform fmt sync-company-status-batch/terraform
       - echo "Running terraform validate..."
-      - terraform init -backend=false && terraform validate sync-company-status-batch/terraform
+      - terraform init -backend=false sync-company-status-batch/terraform && terraform validate sync-company-status-batch/terraform
       - cd sync-company-status-batch/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
   post_build:
     commands:
