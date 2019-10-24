@@ -34,7 +34,7 @@ module "rds_postgres" {
 
   # DB parameter group.
   #TODO: parameterize this
-  family = "postgres11.5"
+  family = "postgres11"
 
   # DB option group
   major_engine_version = "11.5"
