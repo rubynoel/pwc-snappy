@@ -12,6 +12,7 @@ const syncCompanyStatus = () => {
       const importToTmpTableQueryRes = await client.query(
           importToTmpTableQuery
       );
+      console.log(`Response from db is ${importToTmpTableQueryRes}`);
       /* await client.query('BEGIN');
       const queryText = 'INSERT INTO users(name) VALUES($1) RETURNING id';
       const res = await client.query(queryText, ['brianc']);
