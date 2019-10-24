@@ -10,7 +10,7 @@ const syncCompanyStatus = (dbConfig) => {
     host: "myhost.com",
     port: 5432
   };*/
-  return new Promise(loadCompanyData(dbConfig));
+  return loadCompanyData(dbConfig);
 };
 
 const loadCompanyData = (dbConfig) => {
