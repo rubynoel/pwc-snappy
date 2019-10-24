@@ -19,7 +19,7 @@ const loadCompanyData = (dbConfig) => {
     pgClient.connect();
     pgClient
         .query(
-            'SELECT aws_s3.table_import_from_s3(\'company_master\',\'\', \'(format csv)\',:\'s3_uri\')'
+        "SELECT aws_s3.table_import_from_s3('company_master','', '(format csv)',:'s3_uri')" //eslint-disable-line
         )
         .then((response) => {
           pgClient.end();
