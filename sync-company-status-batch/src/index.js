@@ -8,22 +8,22 @@ AWS.config.update({
   region: process.env['RESOURCE_REGION'],
 });
 
-const processJob = () => {
+const processJob = async () => {
   console.log('Running batch..');
 
   jobProcessor.syncCompanyStatus(
       (dbConfig = {
-        user: getSSMParameter(process.env['SSM_KEY_DB_USER']),
-        password: getSSMParameter(process.env['SSM_KEY_DB_PASSWORD']),
-        database: getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
-        host: getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
-        port: getSSMParameter(process.env['SSM_KEY_DB_PORT']),
+        user: await getSSMParameter(process.env['SSM_KEY_DB_USER']),
+        password: await getSSMParameter(process.env['SSM_KEY_DB_PASSWORD']),
+        database: await getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
+        host: await getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
+        port: await getSSMParameter(process.env['SSM_KEY_DB_PORT']),
       })
   );
 };
 
 const getSSMParameter = (name) => {
-  ssm
+  return ssm
       .getParameter({
         Name: `${name}`,
         WithDecryption: true,
@@ -33,6 +33,7 @@ const getSSMParameter = (name) => {
       data.Parameter ?
         data.Parameter.Value :
         Promise.reject(new Error(`SSM Parameter ${name} is not set.`))
-      );
+      )
+      .promise();
 };
 processJob();
