@@ -20,11 +20,12 @@ echo RESOURCE_REGION is $RESOURCE_REGION
 export RESOURCE_REGION="${RESOURCE_REGION:-ap-southeast-2}"
 export AWS_DEFAULT_REGION=$RESOURCE_REGION
 
-$(get_ssm_parameter "$SSM_KEY_DB_ENDPOINT") && export DB_HOST=$?
-$(get_ssm_parameter "$SSM_KEY_DB_USER") && export DB_USER=$?
-$(get_ssm_parameter "$SSM_KEY_DB_PASSWORD") && export DB_PASSWORD=$?
-$(get_ssm_parameter "$SSM_KEY_DB_NAME") && export DB_NAME=$?
-$(get_ssm_parameter "$SSM_KEY_DB_PORT") && export DB_PORT=$?
+$(get_ssm_parameter "$SSM_KEY_DB_ENDPOINT") && export PGHOST=$?
+$(get_ssm_parameter "$SSM_KEY_DB_USER") && export PGUSER=$?
+$(get_ssm_parameter "$SSM_KEY_DB_PASSWORD") && export PGPASSWORD=$?
+$(get_ssm_parameter "$SSM_KEY_DB_NAME") && export PGDATABASE=$?
+$(get_ssm_parameter "$SSM_KEY_DB_PORT") && export PGPORT=$?
+export PGDBSCHEMA=public
 
 #node node_modules/db-migrate/bin/db-migrate
 node index.js

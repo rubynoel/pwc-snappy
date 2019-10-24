@@ -1,35 +1,33 @@
 'use strict';
 
-const pg = require('pg');
+const {Pool} = require('pg');
+const pool = new Pool();
 
-const syncCompanyStatus = (dbConfig) => {
-  /* var dbConfig = {
-    user: "username",
-    password: "mypassword",
-    database: "myDB",
-    host: "myhost.com",
-    port: 5432
-  };*/
-  return loadCompanyData(dbConfig);
-};
-
-const loadCompanyData = (dbConfig) => {
-  const pgClient = new pg.Client(dbConfig);
-  pgClient.connect();
-  pgClient
-      .query(
-      "SELECT aws_s3.table_import_from_s3('company_master','', '(format csv)',:'s3_uri')" //eslint-disable-line
-      )
-      .promise()
-      .then((response) => {
-        pgClient.end();
-        return response.rows;
-      })
-      .catch((err) => {
-        pgClient.end();
-        console.log(`Error occured in data load ${err}`);
-        Promise.reject(new Error(`Error occured in data load query ${err}`));
-      });
+const syncCompanyStatus = () => {
+  (async () => {
+    const client = await pool.connect();
+    try {
+      const importToTmpTableQuery =
+        "SELECT aws_s3.table_import_from_s3('company_master','', '(format csv)',:'s3_uri')"; //eslint-disable-line
+      const importToTmpTableQueryRes = await client.query(
+          importToTmpTableQuery
+      );
+      console.log(`Response from db is ${importToTmpTableQueryRes}`);
+      /* await client.query('BEGIN');
+      const queryText = 'INSERT INTO users(name) VALUES($1) RETURNING id';
+      const res = await client.query(queryText, ['brianc']);
+      const insertPhotoText =
+        'INSERT INTO photos(user_id, photo_url) VALUES ($1, $2)';
+      const insertPhotoValues = [res.rows[0].id, 's3.bucket.foo'];
+      await client.query(insertPhotoText, insertPhotoValues);
+      await client.query('COMMIT');*/
+    } catch (e) {
+      // await client.query('ROLLBACK');
+      throw e;
+    } finally {
+      client.release();
+    }
+  })().catch((e) => console.error(e.stack));
 };
 
 exports.syncCompanyStatus = syncCompanyStatus;
