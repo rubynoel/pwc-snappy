@@ -9,7 +9,7 @@ AWS.config.update({
 
 // const ssm = new AWS.SSM();
 
-const processJob = async () => {
+const processJob = () => {
   console.log(`Running batch..${process.env['RESOURCE_REGION']}`);
 
   /* var dbConfig = {
@@ -19,7 +19,10 @@ const processJob = async () => {
     host: await getSSMParameter(process.env['SSM_KEY_DB_ENDPOINT']),
     port: await getSSMParameter(process.env['SSM_KEY_DB_PORT']),
   };*/
-  jobProcessor.syncCompanyStatus();
+  jobProcessor.syncCompanyStatus().catch((e) => {
+    console.error(e.stack);
+    process.exit(1);
+  });
 };
 
 /* const getSSMParameter = (name) => {
