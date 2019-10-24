@@ -14,31 +14,21 @@ const syncCompanyStatus = (dbConfig) => {
 };
 
 const loadCompanyData = (dbConfig) => {
-  const loadDataQuery = () => {
-    const pgClient = new pg.Client(dbConfig);
-    pgClient.connect();
-    pgClient
-        .query(
-        "SELECT aws_s3.table_import_from_s3('company_master','', '(format csv)',:'s3_uri')" //eslint-disable-line
-        )
-        .then((response) => {
-          pgClient.end();
-          return response.rows;
-        })
-        .catch((err) => {
-          pgClient.end();
-          console.log(`Error occured in data load ${err}`);
-          Promise.reject(new Error(`Error occured in data load query ${err}`));
-        });
-  };
-
-  loadDataQuery
+  const pgClient = new pg.Client(dbConfig);
+  pgClient.connect();
+  pgClient
+      .query(
+      "SELECT aws_s3.table_import_from_s3('company_master','', '(format csv)',:'s3_uri')" //eslint-disable-line
+      )
+      .promise()
       .then((response) => {
-        console.log(`PG response is ${response}`);
+        pgClient.end();
+        return response.rows;
       })
       .catch((err) => {
+        pgClient.end();
         console.log(`Error occured in data load ${err}`);
-        Promise.reject(new Error(`Error occured in data load ${err}`));
+        Promise.reject(new Error(`Error occured in data load query ${err}`));
       });
 };
 
