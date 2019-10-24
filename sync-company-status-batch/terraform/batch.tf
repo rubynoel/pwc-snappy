@@ -54,6 +54,42 @@ resource "aws_iam_role_policy_attachment" "aws_batch_service_role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSBatchServiceRole"
 }
 
+resource "aws_iam_role" "job_container_task_role" {
+  name = "${local.batch_name_prefix}-ecs-task-role"
+
+  assume_role_policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+    {
+        "Action": "sts:AssumeRole",
+        "Effect": "Allow",
+        "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+        }
+    }
+    ]
+}
+EOF
+}
+
+data "template_file" "job_container_task_role_policy_doc" {
+  template = "${file("${path.module}/templates/job-ecs-role-policy.tpl")}"
+
+  vars  = {
+    application_id = "${var.application_id}"
+    stage = "${var.stage}"
+    vpc_arn = "arn:aws:ec2:*:*:vpc/${data.aws_ssm_parameter.vpc_id.value}"
+    codepipeline_bucket_arn = "${aws_s3_bucket.codepipeline_bucket.arn}"
+  }
+}
+
+resource "aws_iam_role_policy" "job_container_task_role_policy" {
+  role = "${aws_iam_role.job_container_task_role.name}"
+  name = "${local.cicd_name_prefix}-job-ecs-task-policy"
+  policy = "${data.template_file.job_container_task_role_policy_doc.rendered}"
+}
+
 resource "aws_batch_compute_environment" "batch_compute_env" {
   compute_environment_name = "${local.batch_name_prefix}-env"
   
@@ -89,6 +125,7 @@ resource "aws_batch_job_definition" "batch_job_definition" {
 {
     "command": ["ls", "-la"],
     "image": "${var.batch_job_ecr_repo_url}/${var.batch_job_ecr_repo_name}:${var.batch_job_image_name}",
+    "jobRoleArn": "",
     "memory": ${var.batch_job_memory},
     "vcpus": ${var.batch_job_vcpu},
     "volumes": [
@@ -101,7 +138,13 @@ resource "aws_batch_job_definition" "batch_job_definition" {
     ],
     "environment": [
       {"name": "STAGE", "value": "${var.stage}"},
-      {"name": "APPLICATION_ID", "value": "${var.application_id}"}
+      {"name": "APPLICATION_ID", "value": "${var.application_id}"},
+      {"name": "RESOURCE_REGION", "value": "${var.aws_region}"},
+      {"name": "SSM_KEY_DB_ENDPOINT", "value": "${aws_ssm_parameter.rds_postgres_endpoint.name}"},
+      {"name": "SSM_KEY_DB_NAME", "value": "${aws_ssm_parameter.rds_postgres_database_name.name}"},
+      {"name": "SSM_KEY_DB_PORT", "value": "${aws_ssm_parameter.rds_postgres_database_port.name}"},
+      {"name": "SSM_KEY_DB_USER", "value": "${aws_ssm_parameter.rds_postgres_username.name}"},
+      {"name": "SSM_KEY_DB_PASSWORD", "value": "${aws_ssm_parameter.rds_postgres_password.name}"}
     ],
     "mountPoints": [
         {

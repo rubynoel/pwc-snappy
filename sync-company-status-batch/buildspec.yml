@@ -33,10 +33,15 @@ phases:
       - docker tag $ECR_REPO_NAME:$IMAGE_TAG $REPOSITORY_URI:$IMAGE_TAG
       - echo "Pushing application image to ecr"
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Running terraform format..."
+      - terraform fmt sync-company-status-batch/terraform
+      - echo "Running terraform validate..."
+      - terraform init -backend=false && terraform validate sync-company-status-batch/terraform
       - cd sync-company-status-batch/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
   post_build:
     commands:
       - echo Build completed on `date`
 artifacts:
   files:
-    - src
+    - sync-company-status-batch/terraform/tfplan
+  discard-paths: yes

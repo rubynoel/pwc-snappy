@@ -18,7 +18,7 @@ EOF
   tags = local.common_tags
 }
 
-# TODO: Change permissions to be more restrictive
+# TODO: Some statements in the code build role policy template grant more permissions than needed. Change to more restrictive permissions.
 data "template_file" "codebuild_role_policy_doc" {
   template = "${file("${path.module}/templates/codebuild-role-policy.tpl")}"
 
