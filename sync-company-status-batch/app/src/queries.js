@@ -30,7 +30,7 @@ const insertMasterTableQuery = () =>
   `INSERT INTO company_master  
     SELECT new_companies.name, new_companies.service_name, 
     new_companies.tagline, new_companies.email, 
-    new_companies.business_number_int "business_number", 
+    cast(new_companies.business_number_int as bigint) "business_number", 
     new_companies.restricted_flag,
     CURRENT_TIMESTAMP "created_on",
     CURRENT_TIMESTAMP "updated_on" FROM 
