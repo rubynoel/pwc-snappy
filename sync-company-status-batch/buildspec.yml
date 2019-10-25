@@ -26,7 +26,7 @@ phases:
   build:
     commands:
       - echo "Packaging application"
-      - cd sync-company-status-batch/src && npm run build && cd ../..
+      - cd sync-company-status-batch/src && npm run build && npm run test && cd ../..
       - echo "Building application image"
       - build_dir=sync-company-status-batch
       - docker build $build_dir -t ${ECR_REPO_NAME}:$IMAGE_TAG --file $build_dir/src/Dockerfile

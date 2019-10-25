@@ -4,6 +4,7 @@ test('Able to sync csv data from S3 to company database', async () => {
   const PGMock2 = require('pgmock2').default;
   const pgmock = new PGMock2();
 
+  // TODO: change this to a useful test
   try {
     await jobProcessor.syncCompanyStatus(true, pgmock);
   } catch (e) {
@@ -13,7 +14,6 @@ test('Able to sync csv data from S3 to company database', async () => {
     };
   }
 
-  // TODO: change this to a useful test
   pgmock.add(
       'SELECT * FROM company_master WHERE business_number = $1',
       ['number'],
