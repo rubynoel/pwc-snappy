@@ -2,7 +2,7 @@
 
 #TODO: better error handling
 exit_on_error() {
-    if [ $? -eq 0 ]; then
+    if [ $? -ne 0 ]; then
         echo "Error in job. Exiting."
         exit 1
     fi
@@ -33,6 +33,6 @@ export PGPORT=$(aws ssm get-parameter --name $SSM_KEY_DB_PORT --with-decryption 
 export PGDBSCHEMA=public
 
 echo PGHOST is $PGHOST
-node node_modules/db-migrate/bin/db-migrate up --config ./db/config/database.json --env thisEnv --migrations-dir ./db/migrations
+node node_modules/db-migrate/bin/db-migrate up --config ./db/config/database.json --env thisEnv --migrations-dir ./migrations || exit_on_error
 node index.js
 echo "Job exit code is "$?
