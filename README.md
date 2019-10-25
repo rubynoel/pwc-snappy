@@ -32,7 +32,7 @@ psql --host=psql --host=pwc-snappy-dev-company-db.cbdns62mkwjj.ap-southeast-2.rd
 
 CREATE TABLE test (id SERIAL, name varchar(80), service_name varchar(80), tagline varchar(80), email varchar(80), business_number varchar(80), restricted_flag boolean);
 
-SELECT aws_s3.table_import_from_s3('test','', '(format csv)', aws_commons.create_s3_uri('pwc-snappy-dev-company-status-sync-s3bucket-i5na9hg2bfx3', '/test/datafile', 'ap-southeast-2'));
+SELECT aws_s3.table_import_from_s3('test','', '(format csv, header true)', aws_commons.create_s3_uri('pwc-snappy-dev-company-status-sync-s3bucket-i5na9hg2bfx3', 'test/datafile', 'ap-southeast-2'));
 
 SELECT aws_s3.table_import_from_s3('test','', '(format csv)', 'pwc-snappy-dev-company-status-sync-s3bucket-i5na9hg2bfx3', 'test/datafile/company_data.csv', 'ap-southeast-2');
 
