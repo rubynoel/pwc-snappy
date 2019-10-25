@@ -1,5 +1,5 @@
 locals {
-    batch_name_prefix = "${var.application_id}-${var.stage}-${var.batch_name}"
+  batch_name_prefix = "${var.application_id}-${var.stage}-${var.batch_name}"
 }
 resource "aws_iam_role" "ecs_instance_role" {
   name = "${local.batch_name_prefix}-role"
@@ -76,21 +76,21 @@ EOF
 data "template_file" "job_container_task_role_policy_doc" {
   template = "${file("${path.module}/templates/job-ecs-role-policy.tpl")}"
 
-  vars  = {
+  vars = {
     application_id = "${var.application_id}"
-    stage = "${var.stage}"
+    stage          = "${var.stage}"
   }
 }
 
 resource "aws_iam_role_policy" "job_container_task_role_policy" {
-  role = "${aws_iam_role.job_container_task_role.name}"
-  name = "${local.batch_name_prefix}-job-ecs-task-policy"
+  role   = "${aws_iam_role.job_container_task_role.name}"
+  name   = "${local.batch_name_prefix}-job-ecs-task-policy"
   policy = "${data.template_file.job_container_task_role_policy_doc.rendered}"
 }
 
 resource "aws_batch_compute_environment" "batch_compute_env" {
   compute_environment_name = "${local.batch_name_prefix}-env"
-  
+
   compute_resources {
     instance_role = "${aws_iam_instance_profile.ecs_instance_role.arn}"
 
@@ -99,14 +99,14 @@ resource "aws_batch_compute_environment" "batch_compute_env" {
     ]
 
     #parameterize vcpus
-    max_vcpus = 8
+    max_vcpus = 4
     min_vcpus = 0
 
     security_group_ids = [
       "${data.aws_ssm_parameter.default_security_group_id.value}" #TODO: Create a separate security group
     ]
 
-    subnets = split(",",data.aws_ssm_parameter.param_private_subnet_ids.value)
+    subnets = split(",", data.aws_ssm_parameter.param_private_subnet_ids.value)
 
     type = "EC2"
   }

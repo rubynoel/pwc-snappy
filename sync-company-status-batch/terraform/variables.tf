@@ -19,7 +19,7 @@ variable "s3_kms_key_id" {
 }
 
 variable "aws_region" {
-  type = string
+  type    = string
   default = "ap-southeast-2"
 }
 
@@ -40,17 +40,17 @@ variable "batch_name" {
 }
 
 variable "batch_compute_instance_type" {
-  type = string
+  type    = string
   default = "optimal"
 }
 
 variable "batch_job_memory" {
-  type = number
+  type    = number
   default = 500
 }
 
 variable "batch_job_vcpu" {
-  type = number
+  type    = number
   default = 1
 }
 
@@ -59,17 +59,17 @@ variable "rds_db_name" {
 }
 
 variable "rds_db_deletion_protection" {
-  type = bool
+  type    = bool
   default = false
 }
 
 variable "rds_username" {
-  type = string
+  type    = string
   default = "rdssystemuser"
 }
 
 variable "rds_password" {
-  type = string
+  type    = string
   default = "ChangePasswordAsap1*"
 }
 
