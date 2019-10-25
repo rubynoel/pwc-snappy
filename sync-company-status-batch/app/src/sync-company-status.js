@@ -18,7 +18,8 @@ const syncCompanyStatus = async (isMocked, poolMock) => {
     console.log(`Temp table created ${JSON.stringify(createTmpTableQueryRes)}`);
     // Load the s3 csv data into the temporary staging table
     const importToTmpTableQueryRes = await client.query(
-        queries.importFromS3ToTmpTableQuery(process.env['COMPANY_DATA_BUCKET'], process.env['COMPANY_DATA_FILE_OBJECT_KEY'], region)
+        queries.importFromS3ToTmpTableQuery(process.env['COMPANY_DATA_BUCKET'],
+            process.env['COMPANY_DATA_FILE_OBJECT_KEY'], region)
     );
     console.log(
         `Response from db is ${JSON.stringify(importToTmpTableQueryRes)}`
