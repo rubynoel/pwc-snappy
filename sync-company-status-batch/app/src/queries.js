@@ -30,16 +30,16 @@ const insertMasterTableQuery = () =>
   `INSERT INTO company_master  
     SELECT new_companies.name, new_companies.service_name, 
     new_companies.tagline, new_companies.email, 
-    cast(new_companies.business_number_int as bigint) "business_number", 
+    new_companies.business_number_int "business_number", 
     new_companies.restricted_flag,
     CURRENT_TIMESTAMP "created_on",
     CURRENT_TIMESTAMP "updated_on" FROM 
-      (SELECT stg.*, regexp_replace(stg.business_number, 
-        '[^0-9]+', '', 'g') "business_number_int"
+      (SELECT stg.*, cast(regexp_replace(stg.business_number, 
+        '[^0-9]+', '', 'g') as bigint) "business_number_int"
         FROM tmp_company_master as stg EXCEPT select tmp.* from (
           SELECT tmpRaw.*, 
-          regexp_replace(tmpRaw.business_number, 
-            '[^0-9]+', '', 'g') "business_number_int" 
+          cast(regexp_replace(tmpRaw.business_number, 
+            '[^0-9]+', '', 'g') as bigint) "business_number_int" 
           FROM tmp_company_master tmpRaw) as tmp 
           JOIN company_master AS mas1 
           ON tmp.business_number_int = mas1.business_number) as new_companies`;
@@ -51,8 +51,8 @@ const updateMasterTableQuery = () => `UPDATE company_master
     updated_on = CURRENT_TIMESTAMP
     FROM  (
       select tmp.* from (
-        SELECT tmpRaw.*, regexp_replace(tmpRaw.business_number, 
-            '[^0-9]+', '', 'g') "business_number_int" 
+        SELECT tmpRaw.*, cast(regexp_replace(tmpRaw.business_number, 
+            '[^0-9]+', '', 'g') as bigint) "business_number_int" 
           FROM test tmpRaw) as tmp 
           JOIN company_master AS mas1 
           ON tmp.business_number_int = mas1.business_number) as stg 
