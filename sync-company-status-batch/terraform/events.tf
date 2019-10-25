@@ -35,10 +35,10 @@ resource "aws_iam_role_policy" "cloudwatch_events_batch_schedule_role_policy" {
 }
 
 resource "aws_cloudwatch_event_rule" "cloudwatch_schedule_batch_event_rule" {
-  name        = "${local.batch_name_prefix}-run-every-ten-mins"
-  description = "Schedule ${var.batch_name}"
-  schedule_expression = rate(10 minutes)
-  role_arn = "${aws_iam_role.cloudwatch_events_batch_schedule_role.arn}"
+  name                = "${local.batch_name_prefix}-run-every-ten-mins"
+  description         = "Schedule ${var.batch_name}"
+  schedule_expression = "rate(10 minutes)"
+  role_arn            = "${aws_iam_role.cloudwatch_events_batch_schedule_role.arn}"
 }
 
 resource "aws_cloudwatch_event_target" "cloudwatch_schedule_batch_event_target" {
@@ -46,7 +46,7 @@ resource "aws_cloudwatch_event_target" "cloudwatch_schedule_batch_event_target" 
   rule      = "${aws_cloudwatch_event_rule.cloudwatch_schedule_batch_event_rule.name}"
   arn       = "${aws_kinesis_stream.test_stream.arn}"
   batch_target {
-      job_definition = "${aws_batch_job_definition.batch_job_definition.arn}"
-      job_name = "${local.batch_name_prefix}-scheduled-run"
+    job_definition = "${aws_batch_job_definition.batch_job_definition.arn}"
+    job_name       = "${local.batch_name_prefix}-scheduled-run"
   }
 }
