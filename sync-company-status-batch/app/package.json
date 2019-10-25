@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/webpack",
+    "build": "npm install webpack webpack-cli && ./node_modules/.bin/webpack",
     "test": "./node_modules/.bin/jest"
   },
   "author": "",
