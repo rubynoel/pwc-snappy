@@ -32,7 +32,8 @@ const insertMasterTableQuery = () =>
     new_companies.tagline, new_companies.email, 
     new_companies.business_number_int "business_number", 
     new_companies.restricted_flag,
-    CURRENT_TIMESTAMP FROM 
+    CURRENT_TIMESTAMP "created_on",
+    CURRENT_TIMESTAMP "updated_on" FROM 
       (SELECT stg.*, regexp_replace(stg.business_number, 
         '[^0-9]+', '', 'g') "business_number_int"
         FROM tmp_company_master as stg EXCEPT select tmp.* from (
@@ -46,7 +47,8 @@ const insertMasterTableQuery = () =>
 const updateMasterTableQuery = () => `UPDATE company_master_test1  
     SET name = stg.name, service_name = stg.service_name, 
     tagline = stg.tagline, email = stg.email, 
-    restricted_flag = stg.restricted_flag 
+    restricted_flag = stg.restricted_flag,
+    updated_on = CURRENT_TIMESTAMP
     FROM  (
       select tmp.* from (
         SELECT tmpRaw.*, regexp_replace(tmpRaw.business_number, 

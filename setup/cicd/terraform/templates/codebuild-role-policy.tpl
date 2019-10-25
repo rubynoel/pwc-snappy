@@ -191,6 +191,18 @@
               "arn:aws:rds:*:*:pg:${application_id}*",
               "arn:aws:rds:*:*:subgrp:${application_id}*"
             ]
+        },
+        {
+            "Sid": "AllowCloudWatchEventsActions",
+            "Effect": "Allow",
+            "Action": "events:*",
+            "Resource": ["arn:aws:events:*:*:*/${application_id}*"]
+        },
+        {
+            "Sid": "AllowCloudWatchEventsReadActions",
+            "Effect": "Allow",
+            "Action": ["events:List*","events:Describe*"],
+            "Resource": "*"
         }
   ]
 }
