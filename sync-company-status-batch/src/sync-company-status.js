@@ -5,8 +5,9 @@ const pool = new Pool();
 const region = process.env['RESOURCE_REGION'];
 const queries = require('./queries');
 
-const syncCompanyStatus = async () => {
-  const client = await pool.connect();
+const syncCompanyStatus = async (isMocked, poolMock) => {
+  const pgPool = isMocked ? poolMock : pool;
+  const client = await pgPool.connect();
   try {
     await client.query('BEGIN');
     // Create a temp table that exists only for the duration of the
