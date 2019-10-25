@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npm install && ./node_modules/.bin/eslint .",
+    "build": "./node_modules/.bin/webpack",
     "test": "./node_modules/.bin/jest"
   },
   "author": "",
