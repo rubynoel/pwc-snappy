@@ -3,6 +3,7 @@
 const {Pool} = require('pg');
 const pool = new Pool();
 const region = process.env['RESOURCE_REGION'];
+const queries = require('./queries');
 
 const syncCompanyStatus = async () => {
   const client = await pool.connect();
@@ -10,27 +11,31 @@ const syncCompanyStatus = async () => {
     await client.query('BEGIN');
     // Create a temp table that exists only for the duration of the
     // transaction to use as a staging table
-    const createTmpTableQuery = `CREATE TEMP TABLE tmp_company_master(
-      id serial,
-      name varchar(80), 
-      service_name varchar(80), 
-      tagline varchar(80),
-      email varchar(80), 
-      business_number varchar(80), 
-      restricted_flag boolean)`;
-    const createTmpTableQueryRes = await client.query(createTmpTableQuery);
-    console.log(`Temp table created ${createTmpTableQueryRes}`);
-
-    const dataBucket = process.env['COMPANY_DATA_BUCKET'];
-    const fileObjectKey = process.env['COMPANY_DATA_FILE_OBJECT_KEY'];
-    const importToTmpTableQuery = `SELECT aws_s3.table_import_from_s3(
-      'tmp_company_master',
-      '', '(format csv, header true)', 
-        '${dataBucket}', 
-        '${fileObjectKey}', 
-        '${region}')`;
-    const importToTmpTableQueryRes = await client.query(importToTmpTableQuery);
-    console.log(`Response from db is ${importToTmpTableQueryRes}`);
+    const createTmpTableQueryRes = await client.query(
+        queries.createTmpTableQuery()
+    );
+    console.log(`Temp table created ${JSON.stringify(createTmpTableQueryRes)}`);
+    // Load the s3 csv data into the temporary staging table
+    const importToTmpTableQueryRes = await client.query(
+        queries.importFromS3ToTmpTableQuery(dataBucket, fileObjectKey, region)
+    );
+    console.log(
+        `Response from db is ${JSON.stringify(importToTmpTableQueryRes)}`
+    );
+    // Update the status of existing companies in the company master table
+    const updateMasterTableQueryRes = await client.query(
+        queries.updateMasterTableQuery()
+    );
+    console.log(
+        `Response from db is ${JSON.stringify(updateMasterTableQueryRes)}`
+    );
+    // Insert the non-existing rows from staging table to company master table
+    const insertMasterTableQueryRes = await client.query(
+        queries.insertMasterTableQuery()
+    );
+    console.log(
+        `Response from db is ${JSON.stringify(insertMasterTableQueryRes)}`
+    );
 
     /* await client.query('BEGIN');
       const queryText = 'INSERT INTO users(name) VALUES($1) RETURNING id';
@@ -49,4 +54,8 @@ const syncCompanyStatus = async () => {
   }
 };
 
-exports.syncCompanyStatus = syncCompanyStatus;
+module.exports = {
+  syncCompanyStatus,
+};
+
+// exports.syncCompanyStatus = syncCompanyStatus;
