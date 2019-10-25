@@ -1,7 +1,6 @@
 'use strict';
 
-const createTmpTableQuery = () => {
-  `CREATE TEMP TABLE tmp_company_master(
+const createTmpTableQuery = () => `CREATE TEMP TABLE tmp_company_master(
       id serial,
       name varchar(80), 
       service_name varchar(80), 
@@ -9,24 +8,25 @@ const createTmpTableQuery = () => {
       email varchar(80), 
       business_number varchar(80), 
       restricted_flag boolean)`;
-};
 
 const importFromS3ToTmpTableQuery = (
     fromDataBucket,
     fromFileObjectKey,
     fromRegion
 ) => {
-  return {
-    text: `SELECT aws_s3.table_import_from_s3(
+  return fromDataBucket && fromFileObjectKey && fromRegion ?
+    {
+      text: `SELECT aws_s3.table_import_from_s3(
       'tmp_company_master', '', '(format csv, header true)', 
       $1, 
       $2, 
       $3)`,
-    values: [fromDataBucket, fromFileObjectKey, fromRegion],
-  };
+      values: [fromDataBucket, fromFileObjectKey, fromRegion],
+    } :
+    null;
 };
 
-const insertMasterTableQuery = () => {
+const insertMasterTableQuery = () =>
   `INSERT INTO company_master  
     SELECT new_companies.name, new_companies.service_name, 
     new_companies.tagline, new_companies.email, 
@@ -41,12 +41,11 @@ const insertMasterTableQuery = () => {
           FROM tmp_company_master tmpRaw) as tmp 
           JOIN company_master AS mas1 
           ON tmp.business_number_int = mas1.business_number) as new_companies`;
-};
 
-const updateMasterTableQuery = () => {
-  `UPDATE company_master_test1  SET name = stg.name, 
-    service_name = stg.service_name, tagline = stg.tagline, 
-    email = stg.email, restricted_flag = stg.restricted_flag 
+const updateMasterTableQuery = () => `UPDATE company_master_test1  
+    SET name = stg.name, service_name = stg.service_name, 
+    tagline = stg.tagline, email = stg.email, 
+    restricted_flag = stg.restricted_flag 
     FROM  (
       select tmp.* from (
         SELECT tmpRaw.*, regexp_replace(tmpRaw.business_number, 
@@ -55,7 +54,6 @@ const updateMasterTableQuery = () => {
           JOIN company_master_test1 AS mas1 
           ON tmp.business_number_int = mas1.business_number) as stg 
           WHERE company_master_test1.business_number = stg.business_number_int`;
-};
 
 module.exports = {
   createTmpTableQuery,
