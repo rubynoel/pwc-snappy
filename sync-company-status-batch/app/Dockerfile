@@ -24,7 +24,7 @@ WORKDIR /app
 COPY ./app/dist /app
 COPY ./app/entrypoint.sh /app
 COPY ./app/db /app/db
-COPY ./app/migrations /app/db/migrations
+COPY ./app/migrations /app/migrations
 RUN chmod +x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]

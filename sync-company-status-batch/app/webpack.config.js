@@ -1,9 +1,11 @@
 const path = require('path');
 const webpack = require('webpack');
+const nodeExternals = require('webpack-node-externals');
 module.exports = {
   target: 'node',
   entry: {
-    app: ['./src/index.js'],
+    app: './src/index.js',
+    dbmigrate: './src/run-migrations.js',
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -11,6 +13,7 @@ module.exports = {
     filename: '[name].js',
   },
   plugins: [new webpack.IgnorePlugin(/^pg-native$/)],
+  externals: [nodeExternals()],
   module: {
     rules: [
       {

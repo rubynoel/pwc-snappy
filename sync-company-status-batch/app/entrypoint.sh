@@ -22,6 +22,7 @@ export PGDATABASE=$(aws ssm get-parameter --name $SSM_KEY_DB_NAME --with-decrypt
 export PGPORT=$(aws ssm get-parameter --name $SSM_KEY_DB_PORT --with-decryption | jq --raw-output '.Parameter.Value')
 export PGDBSCHEMA=public
 
-node node_modules/db-migrate/bin/db-migrate up --config ./db/config/database.json --env thisEnv --migrations-dir ./migrations || exit_on_error
+#node node_modules/db-migrate/bin/db-migrate up --config ./db/config/database.json --env thisEnv --migrations-dir ./migrations || exit_on_error
+node dbmigrate.js
 node app.js
 echo "Job exit code is "$?
