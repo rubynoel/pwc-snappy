@@ -21,7 +21,8 @@ RUN echo "AWS CLI installed" && aws --version
 
 WORKDIR /app
 
-COPY ./app /app
+COPY ./app/dist /app
+COPY ./app/entrypoint.sh /app
 RUN chmod +x /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]

@@ -1,4 +1,4 @@
-const queries = require('../queries');
+const queries = require('../src/queries');
 
 test('All queries are valid', () => {
   expect(queries.createTmpTableQuery()).toBeTruthy();

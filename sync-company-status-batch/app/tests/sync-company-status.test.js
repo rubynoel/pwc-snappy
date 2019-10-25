@@ -1,4 +1,4 @@
-const jobProcessor = require('../sync-company-status');
+const jobProcessor = require('../src/sync-company-status');
 
 test('Able to sync csv data from S3 to company database', async () => {
   const PGMock2 = require('pgmock2').default;
