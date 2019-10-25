@@ -28,6 +28,14 @@ resource "aws_ssm_parameter" "rds_postgres_endpoint" {
   tags      = local.common_tags
 }
 
+resource "aws_ssm_parameter" "rds_postgres_address" {
+  name      = "${local.ssm_param_path_prefix}/rds/address"
+  type      = "SecureString"
+  value     = "${module.rds_postgres.this_db_instance_address}"
+  overwrite = true
+  tags      = local.common_tags
+}
+
 resource "aws_ssm_parameter" "rds_postgres_database_name" {
   name      = "${local.ssm_param_path_prefix}/rds/database_name"
   type      = "SecureString"

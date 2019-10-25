@@ -11,7 +11,7 @@ exit_on_error() {
 ssm_get_parameter() {
     value=$(aws ssm get-parameter --name $1 --with-decryption | jq --raw-output '.Parameter.Value')
     echo "Value in function is"$value
-    return $value
+    return "$value"
 }
 
 echo "Starting the job shell script"
@@ -24,8 +24,8 @@ export RESOURCE_REGION="${RESOURCE_REGION:-ap-southeast-2}"
 export AWS_DEFAULT_REGION=$RESOURCE_REGION
 #$(get_ssm_parameter "$SSM_KEY_DB_ENDPOINT") &&
 # TODO: Move ssm get parameter to a function
-ssm_get_parameter $SSM_KEY_DB_ENDPOINT && PGHOST=$?
-export PGHOST=$(aws ssm get-parameter --name $SSM_KEY_DB_ENDPOINT --with-decryption | jq --raw-output '.Parameter.Value')
+ssm_get_parameter $SSM_KEY_DB_HOST && PGHOST=$?
+export PGHOST=$(aws ssm get-parameter --name $SSM_KEY_DB_HOST --with-decryption | jq --raw-output '.Parameter.Value')
 export PGUSER=$(aws ssm get-parameter --name $SSM_KEY_DB_USER --with-decryption | jq --raw-output '.Parameter.Value')
 export PGPASSWORD=$(aws ssm get-parameter --name $SSM_KEY_DB_PASSWORD --with-decryption | jq --raw-output '.Parameter.Value')
 export PGDATABASE=$(aws ssm get-parameter --name $SSM_KEY_DB_NAME --with-decryption | jq --raw-output '.Parameter.Value')

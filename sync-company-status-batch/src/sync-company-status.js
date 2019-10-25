@@ -11,7 +11,9 @@ const syncCompanyStatus = async () => {
     // Create a temp table that exists only for the duration of the
     // transaction to use as a staging table
     const createTmpTableQuery = `CREATE TEMP TABLE tmp_company_master(
+      id serial,
       name varchar(80), 
+      service_name varchar(80), 
       tagline varchar(80),
       email varchar(80), 
       business_number varchar(80), 
@@ -23,11 +25,10 @@ const syncCompanyStatus = async () => {
     const fileObjectKey = process.env['COMPANY_DATA_FILE_OBJECT_KEY'];
     const importToTmpTableQuery = `SELECT aws_s3.table_import_from_s3(
       'tmp_company_master',
-      '', '(format csv)', 
-      aws_commons.create_s3_uri(
+      '', '(format csv, header true)', 
         '${dataBucket}', 
         '${fileObjectKey}', 
-        '${region}'))`;
+        '${region}')`;
     const importToTmpTableQueryRes = await client.query(importToTmpTableQuery);
     console.log(`Response from db is ${importToTmpTableQueryRes}`);
 

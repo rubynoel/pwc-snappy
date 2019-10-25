@@ -139,7 +139,7 @@ resource "aws_batch_job_definition" "batch_job_definition" {
       {"name": "STAGE", "value": "${var.stage}"},
       {"name": "APPLICATION_ID", "value": "${var.application_id}"},
       {"name": "RESOURCE_REGION", "value": "${var.aws_region}"},
-      {"name": "SSM_KEY_DB_ENDPOINT", "value": "${aws_ssm_parameter.rds_postgres_endpoint.name}"},
+      {"name": "SSM_KEY_DB_HOST", "value": "${aws_ssm_parameter.rds_postgres_address.name}"},
       {"name": "SSM_KEY_DB_NAME", "value": "${aws_ssm_parameter.rds_postgres_database_name.name}"},
       {"name": "SSM_KEY_DB_PORT", "value": "${aws_ssm_parameter.rds_postgres_database_port.name}"},
       {"name": "SSM_KEY_DB_USER", "value": "${aws_ssm_parameter.rds_postgres_username.name}"},
