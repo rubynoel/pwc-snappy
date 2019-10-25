@@ -201,7 +201,7 @@
         {
             "Sid": "AllowCloudWatchEventsReadActions",
             "Effect": "Allow",
-            "Action": ["events:List*","events:Describe*"]
+            "Action": ["events:List*","events:Describe*"],
             "Resource": "*"
         }
   ]
