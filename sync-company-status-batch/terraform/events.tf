@@ -44,7 +44,7 @@ resource "aws_cloudwatch_event_rule" "cloudwatch_schedule_batch_event_rule" {
 resource "aws_cloudwatch_event_target" "cloudwatch_schedule_batch_event_target" {
   target_id = "${local.batch_name_prefix}-scheduled-run"
   rule      = "${aws_cloudwatch_event_rule.cloudwatch_schedule_batch_event_rule.name}"
-  arn       = "${aws_kinesis_stream.test_stream.arn}"
+  arn       = "${aws_batch_job_queue.batch_job_queue.arn}"
   batch_target {
     job_definition = "${aws_batch_job_definition.batch_job_definition.arn}"
     job_name       = "${local.batch_name_prefix}-scheduled-run"
