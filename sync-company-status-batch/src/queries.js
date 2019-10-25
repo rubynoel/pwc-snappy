@@ -31,7 +31,8 @@ const insertMasterTableQuery = () =>
     SELECT new_companies.name, new_companies.service_name, 
     new_companies.tagline, new_companies.email, 
     new_companies.business_number_int "business_number", 
-    new_companies.restricted_flag FROM 
+    new_companies.restricted_flag,
+    CURRENT_TIMESTAMP FROM 
       (SELECT stg.*, regexp_replace(stg.business_number, 
         '[^0-9]+', '', 'g') "business_number_int"
         FROM tmp_company_master as stg EXCEPT select tmp.* from (
