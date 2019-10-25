@@ -1,5 +1,5 @@
 provider "aws" {
-  
+
 }
 
 provider "github" {
