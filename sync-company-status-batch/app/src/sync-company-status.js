@@ -55,7 +55,7 @@ const syncCompanyStatus = async (isMocked, poolMock) => {
   }
 };
 
-export {
+module.exports = {
   syncCompanyStatus,
 };
 
