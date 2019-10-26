@@ -25,8 +25,8 @@ exports.handler = async (event, context) => {
       apiResponse = {
         statusCode: 200,
         headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
         },
         body: JSON.stringify(searchResponse),
       };
@@ -37,8 +37,8 @@ exports.handler = async (event, context) => {
     apiResponse = {
       statusCode: 500,
       headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*"
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify('Internal Error'),
     };
