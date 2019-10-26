@@ -21,6 +21,12 @@ paths:
           in: query
           required: false
           type: integer
+          description: "Offset for search results pagination. Default is 0"
+        - name: limit
+          in: query
+          required: false
+          type: integer
+          description: "Page limit for search results pagination. Default is 100"
       produces:
         - application/json
       responses:

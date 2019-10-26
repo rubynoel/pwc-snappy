@@ -1,6 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
-var ZipPlugin = require('zip-webpack-plugin');
+const ZipPlugin = require('zip-webpack-plugin');
 module.exports = {
   target: 'node',
   entry: {
