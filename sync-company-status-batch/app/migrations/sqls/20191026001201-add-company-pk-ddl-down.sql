@@ -1,0 +1,1 @@
+ALTER TABLE company_master DROP CONSTRAINT company_master_pkey;
