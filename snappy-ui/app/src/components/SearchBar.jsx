@@ -29,15 +29,15 @@ class SearchBar extends Component {
   };
 
   getSearchTypes = () => {
-    return [this.searchTypes.SEARCH_BY_COMPANY_NAME,this.searchTypes.SEARCH_BY_BUSINESS_NUMER,this.searchTypes.SEARCH_BY_RESTRICTED_STATUS].map(el => {
-      return { value: el.locationId, label: el.locationName };
-    });
+    return [{ label:'Company Name', value: this.searchTypes.SEARCH_BY_COMPANY_NAME},
+    { label:'Business Number', value: this.searchTypes.SEARCH_BY_BUSINESS_NUMER},
+    { label:'Restricted Status', value: this.searchTypes.SEARCH_BY_RESTRICTED_STATUS}];
   };
 
    
   render() {
    return (
-              <Form className="post-form-area">
+              <Form className="search-form-area">
                 
                 <Form.Row className="justify-content-center form-wrap">
                   <Form.Group
@@ -69,7 +69,7 @@ class SearchBar extends Component {
                     <Form.Control
                       as="input"
                       placeholder="Enter a keyword to search"
-                      onChange={this.handleAddressChange}
+                      onChange={this.handleKeywordChange}
                     />
                   </Form.Group>
                 </Form.Row>

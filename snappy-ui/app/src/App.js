@@ -1,13 +1,12 @@
 import React, { Component, Fragment } from 'react';
-import SearchBar from './components/SearchBar';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import SearchPanel from './components/SearchPanel';
 
 class App extends Component {
   state = {  }
   render() {
     return (
-      <Fragment>
-        <SearchBar />
-      </Fragment>
+     <Fragment><SearchPanel/></Fragment>
     );
   }
 }
