@@ -12,7 +12,7 @@ exports.handler = async (event, context) => {
     event.queryStringParameters :
     {};
 
-  const apiResponse = {};
+  let apiResponse = {};
   try {
     const searchResponse = await search({
       fieldName,

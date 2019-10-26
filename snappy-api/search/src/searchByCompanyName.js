@@ -9,9 +9,9 @@ const errorMessages = {
 const queries = {
   findByCompanyName: (keyword) => {
     return {
-      text: `SELECT mas.business_number, mas.name,
-        mas.restricted_flag, mas.service_name, 
-        mas.tagline, mas.email, FROM (
+      text: `SELECT search.business_number, search.name,
+      search.restricted_flag, search.service_name, 
+      search.tagline, search.email FROM (
           SELECT mas.business_number, mas.name,
           mas.restricted_flag, mas.service_name, 
           mas.tagline, mas.email, 
@@ -49,7 +49,7 @@ const validate = (searchParams) => {
   if (!keyword) {
     errors.push(errorMessages.KEYWORD_MISSING_ERR);
   }
-  if (!offset || offset < 0 || offset >= limit) {
+  if (!offset || offset < 0 || (limit && offset >= limit)) {
     errors.push(errorMessages.OFFSET_MISSING_ERR);
   }
   if (!limit) {
@@ -60,4 +60,5 @@ const validate = (searchParams) => {
 
 module.exports = {
   searchByCompanyName,
+  errorMessages,
 };

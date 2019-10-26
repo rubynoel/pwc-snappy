@@ -2,6 +2,8 @@
 
 const {getPool} = require('./dbUtil');
 const {searchByCompanyName} = require('./searchByCompanyName');
+const {searchByBusinessNumber} = require('./searchByBusinessNumber');
+const {searchByRestrictedStatus} = require('./searchByRestrictedStatus');
 
 const searchFields = {
   COMPANY_NAME: 'companyName',
@@ -17,24 +19,30 @@ const search = async (params) => {
   const pgPool = isMocked ? poolMock : getPool();
   const pageLimit =
     limit && limit > 0 && limit <= pageLimitMax ? limit : pageLimitMax;
-
+  const offset = from ? from : 0;
+  let searchResults = {};
   switch (fieldName) {
     case searchFields.COMPANY_NAME:
-      const searchResults = await searchByCompanyName(pgPool, {
+      searchResults = await searchByCompanyName(pgPool, {
         keyword: fieldValue,
-        offset: from,
+        offset: offset,
         limit: pageLimit,
       });
-      console.log(`${searchResults}`);
       break;
     case searchFields.BUSINESS_NUMER:
+      searchResults = await searchByBusinessNumber(pgPool, {
+        businessNumber: fieldValue,
+      });
       break;
     case searchFields.RESTRICTED_STATUS:
+      searchResults = await searchByRestrictedStatus(pgPool, {
+        restrictedFlag: fieldValue,
+      });
       break;
     default:
       break;
   }
-
+  console.log(`${searchResults}`);
   return {total: 1000, rows: [{companyName: 'dummy'}]};
 };
 
@@ -54,13 +62,11 @@ const validate = (searchParams) => {
   if (!fieldValue) {
     errors.push(errorMessages.FIELDVALUE_MISSING_ERR);
   }
-  if (!from || from < 0 || from >= limit) {
+  if (from && (from < 0 || (limit && from >= limit))) {
     errors.push(errorMessages.OFFSET_MISSING_ERR);
   }
-  if (!limit) {
-    errors.push(errorMessages.LIMIT_MISSING_ERR);
-  }
+
   if (errors.length > 0) throw new Error(errors.join('. '));
 };
 
-module.exports = {search};
+module.exports = {search, errorMessages, searchFields};
