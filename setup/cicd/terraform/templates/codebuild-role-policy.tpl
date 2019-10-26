@@ -203,6 +203,21 @@
             "Effect": "Allow",
             "Action": ["events:List*","events:Describe*"],
             "Resource": "*"
+        },
+        {
+            "Sid": "AllowLambdaActions",
+            "Effect": "Allow",
+            "Action": ["lambda:*"],
+            "Resource": ["arn:aws:lambda:*:*:function:${application_id}*"]
+        },
+        {
+          "Effect": "AllowApiGatewayActions",
+          "Action": [
+            "apigateway:*"
+          ],
+          "Resource": [
+            "arn:aws:apigateway:*::/restapis/${application_id}*/*"
+          ]
         }
   ]
 }
