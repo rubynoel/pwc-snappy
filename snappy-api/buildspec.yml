@@ -1,0 +1,31 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 8
+      docker: 18
+  pre_build:
+    commands:
+      - echo "Install dependencies"
+      - pip install boto3
+      - wget https://releases.hashicorp.com/terraform/0.12.10/terraform_0.12.10_linux_amd64.zip
+      - unzip terraform_0.12.10_linux_amd64.zip
+      - mv terraform /bin
+      - rm terraform_0.12.10_linux_amd64.zip
+      - apt-get update
+      - apt-cache search source
+      - apt-get install -y curl jq
+  build:
+    commands:
+      - echo "Packaging application"
+      - cd snappy-api/search && npm run build && npm run test && cd ../..
+      - echo "Running terraform validate..."
+      - terraform init -backend=false snappy-api/terraform && terraform validate snappy-api/terraform
+      - cd snappy-api/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - snappy-api/terraform/tfplan
+  discard-paths: yes
