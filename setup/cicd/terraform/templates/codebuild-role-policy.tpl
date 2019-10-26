@@ -211,13 +211,10 @@
             "Resource": ["arn:aws:lambda:*:*:function:${application_id}*"]
         },
         {
-          "Effect": "AllowApiGatewayActions",
-          "Action": [
-            "apigateway:*"
-          ],
-          "Resource": [
-            "arn:aws:apigateway:*::/restapis/${application_id}*/*"
-          ]
+          "Sid": "AllowApiGatewayActions",
+          "Effect": "Allow",
+          "Action": ["apigateway:*"],
+          "Resource": ["arn:aws:apigateway:*::/restapis/${application_id}*/*"]
         }
   ]
 }
