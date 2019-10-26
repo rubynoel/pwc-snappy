@@ -7,18 +7,17 @@ resource "aws_lambda_permission" "search_lambda_permission" {
 }
 
 resource "aws_lambda_function" "search_lambda" {
-  filename      = "${file("${path.module}/../search/dist/app.zip")}"
-  function_name = "${local.resource_name_prefix}-search-handler"
-  role          = "${aws_iam_role.search_lambda_role.arn}"
-  handler       = "index.handler"
-  runtime       = "nodejs8.10"
-  #source_code_hash = "${filebase64sha256("${path.module}/../search/dist/app.zip")}"
-  depends_on = ["aws_iam_role_policy_attachment.search_lambda_role_policy_attachment"]
+  filename         = "${path.module}/../search/dist/app.zip"
+  function_name    = "${local.resource_name_prefix}-search-handler"
+  role             = "${aws_iam_role.search_lambda_role.arn}"
+  handler          = "index.handler"
+  runtime          = "nodejs8.10"
+  source_code_hash = "${filebase64sha256("${path.module}/../search/dist/app.zip")}"
+  depends_on       = ["aws_iam_role_policy_attachment.search_lambda_role_policy_attachment"]
 }
 
 resource "aws_iam_role" "search_lambda_role" {
-  name = "${local.resource_name_prefix}-search-lambda-role"
-
+  name               = "${local.resource_name_prefix}-search-lambda-role"
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -45,7 +44,6 @@ resource "aws_iam_policy" "search_lambda_role_policy" {
 
 data "template_file" "search_lambda_role_policy_doc" {
   template = "${file("${path.module}/templates/search-lambda-role-policy.tpl")}"
-
   vars = {
     application_id = "${var.application_id}"
     stage          = "${var.stage}"
