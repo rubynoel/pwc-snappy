@@ -1,0 +1,30 @@
+{
+  "name": "snappy-api-search",
+  "version": "1.0.0",
+  "description": "Api to search companies by specified search criteria",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubynoel/pwc-snappy.git"
+  },
+  "author": "Ruby Noel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rubynoel/pwc-snappy/issues"
+  },
+  "homepage": "https://github.com/rubynoel/pwc-snappy#readme",
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-loader": "^3.0.2",
+    "jest": "^24.9.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.9"
+  }
+}
