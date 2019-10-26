@@ -214,8 +214,11 @@
           "Sid": "AllowApiGatewayActions",
           "Effect": "Allow",
           "Action": ["apigateway:*"],
-          "Resource": ["arn:aws:apigateway:*::/restapis/${application_id}*/*",
-          "arn:aws:apigateway:*::/restapis"]
+          "Resource": [
+            "arn:aws:apigateway:*::/restapis/${application_id}*/*",
+            "arn:aws:apigateway:*::/restapis",
+            "arn:aws:apigateway:*::/restapis/*"
+          ]
         }
   ]
 }
