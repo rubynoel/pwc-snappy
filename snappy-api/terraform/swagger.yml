@@ -1,0 +1,62 @@
+swagger: "2.0"
+info:
+  version: "1.0"
+  title: "Snappy Search Api"
+schemes:
+  - https
+paths:
+  /search/{fieldName}/{fieldValue}:
+    get:
+      description: "Search by field name and value"
+      parameters:
+        - name: fieldName
+          in: path
+          required: true
+          type: string
+        - name: fieldValue
+          in: path
+          required: true
+          type: string
+        - name: from
+          in: query
+          required: false
+          type: integer
+      produces:
+        - application/json
+      responses:
+        200:
+          description: "Search was successful"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/SearchResponse"
+      x-amazon-apigateway-integration:
+        uri: ${search_lambda_arn}
+        passthroughBehavior: "when_no_match"
+        httpMethod: POST
+        type: aws_proxy
+
+definitions:
+  SearchResponse:
+    type: object
+    description: "Search response"
+    properties:
+      total:
+        type: integer
+        description: "Total number of matched rows"
+      rows:
+        type: array
+        items:
+          $ref: "#/definitions/SearchResultItem"
+        description: "Search items"
+    required:
+      - total
+
+  SearchResultItem:
+    type: object
+    description: "Individual item in search results"
+    properties:
+      companyName:
+        type: string
+    required:
+      - companyName

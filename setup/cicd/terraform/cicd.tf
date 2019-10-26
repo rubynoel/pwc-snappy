@@ -1,6 +1,6 @@
 locals {
-    cicd_name_prefix = "${var.application_id}-${var.stage}"
-    github_webhook_secret = "super-secret"
+  cicd_name_prefix      = "${var.application_id}-${var.stage}"
+  github_webhook_secret = "super-secret"
 }
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket = "${local.cicd_name_prefix}-codepipeline"
@@ -33,12 +33,12 @@ resource "aws_iam_role" "codepipeline_role" {
   ]
 }
 EOF
-  tags = local.common_tags
+  tags               = local.common_tags
 }
 
 resource "aws_iam_role_policy" "codepipeline_policy" {
-  role = "${aws_iam_role.codepipeline_role.id}"
-  name = "${local.cicd_name_prefix}-codepipeline-policy"
+  role   = "${aws_iam_role.codepipeline_role.id}"
+  name   = "${local.cicd_name_prefix}-codepipeline-policy"
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -129,19 +129,37 @@ resource "aws_codepipeline" "pipeline" {
   }
 
   stage {
-    name = "Build"
+    name = "BuildAndDeploySyncCompanyStatusBatch"
 
     action {
-      name             = "Build"
+      name             = "BuildAndDeployBatch"
       category         = "Build"
       owner            = "AWS"
       provider         = "CodeBuild"
       input_artifacts  = ["source_output"]
-      output_artifacts = ["build_output"]
+      output_artifacts = ["batch_build_output"]
       version          = "1"
 
       configuration = {
-        ProjectName = "${aws_codebuild_project.codebuild_project.name}"
+        ProjectName = "${aws_codebuild_project.codebuild_batch_project.name}"
+      }
+    }
+  }
+
+  stage {
+    name = "BuildAndDeploySnappyApi"
+
+    action {
+      name             = "BuildAndDeploySnappyApi"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["api_build_output"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = "${aws_codebuild_project.codebuild_api_project.name}"
       }
     }
   }
