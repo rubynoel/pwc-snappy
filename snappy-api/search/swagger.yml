@@ -40,22 +40,33 @@ paths:
         uri: ${search_lambda_arn}
         httpMethod: POST
         type: aws_proxy
-  /search:
     options:
-      description: "OPTIONS method for Cors"
-      produces:
-        - application/json
+      description: For CORS support
+      responses:
+        200:
+          description: 200 OK
+          headers:
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
       x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: 200
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+        passthroughBehavior: when_no_match
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
         type: mock
-        passthroughBehavior: "when_no_match"
-        httpMethod: POST
-        default:
-          statusCode: "200"
-          responseParameters:
-            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-            method.response.header.test-method-response-header: "'static value'"
-            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT'"
-            method.response.header.Access-Control-Allow-Origin: "'*'"
 
 definitions:
   SearchResponse:
