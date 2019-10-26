@@ -38,9 +38,24 @@ paths:
               $ref: "#/definitions/SearchResponse"
       x-amazon-apigateway-integration:
         uri: ${search_lambda_arn}
-        passthroughBehavior: "when_no_match"
         httpMethod: POST
         type: aws_proxy
+  /search:
+    options:
+      description: "OPTIONS method for Cors"
+      produces:
+        - application/json
+      x-amazon-apigateway-integration:
+        type: mock
+        passthroughBehavior: "when_no_match"
+        httpMethod: POST
+        default:
+          statusCode: "200"
+          responseParameters:
+            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+            method.response.header.test-method-response-header: "'static value'"
+            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT'"
+            method.response.header.Access-Control-Allow-Origin: "'*'"
 
 definitions:
   SearchResponse:
