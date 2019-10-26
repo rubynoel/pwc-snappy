@@ -5,37 +5,34 @@ const {search} = require('./search');
 exports.handler = async (event, context) => {
   console.log('request: ' + JSON.stringify(event));
 
-  let apiResponse = {};
+  const {fieldName, fieldValue} = event.pathParameters ?
+    event.pathParameters :
+    {};
+  const {from, limit} = event.queryStringParameters ?
+    event.queryStringParameters :
+    {};
+
+  const apiResponse = {};
   try {
     const searchResponse = await search({
-      pageSize: 5,
-      from: 0,
+      fieldName,
+      fieldValue,
+      limit,
+      offset: from,
     });
 
     if (searchResponse) {
-      const searchResult = {
-        total: searchResponse.total,
-        rows: searchResponse.rows,
-      };
       apiResponse = {
         statusCode: 200,
-        headers: {
-          'x-custom-header': 'my custom header value',
-          'Access-Control-Allow-Origin': '*',
-        },
-        body: JSON.stringify(searchResult),
+        body: JSON.stringify(searchResponse),
       };
     } else {
       throw new Error(`Could not obtain search response`);
     }
   } catch (err) {
     apiResponse = {
-      statusCode: '500',
-      headers: {
-        'x-custom-header': 'my custom header value',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify(err),
+      statusCode: 500,
+      body: JSON.stringify('Internal Error'),
     };
   }
 
