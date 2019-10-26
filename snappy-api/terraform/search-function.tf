@@ -12,7 +12,7 @@ resource "aws_lambda_function" "search_lambda" {
   role             = "${aws_iam_role.search_lambda_role.arn}"
   handler          = "index.handler"
   runtime          = "nodejs8.10"
-  source_code_hash = "${filebase64sha256("${file("${path.module}/../search/dist/app.zip")}")}"
+  source_code_hash = "${filebase64sha256("${path.module}/../search/dist/app.zip")}"
   depends_on       = ["aws_iam_role_policy_attachment.search_lambda_role_policy_attachment"]
 }
 
