@@ -1,12 +1,13 @@
 import React, { Component, Fragment } from "react";
 import CustomSelect from "./CustomSelect";
-
+import {searchItems} from "../actions/SearchActions";
+import { Form, Button } from "react-bootstrap";
 
 class SearchBar extends Component {
   constructor(props) {
     super(props);
   }
-  state = { searchType: null, searchKeyword: null };
+  state = { selectedSearchType: null, searchKeyword: null };
 
   handleSearchClick = searchParams => {
     this.props.dispatch(searchItems(searchParams));
@@ -18,8 +19,7 @@ class SearchBar extends Component {
   };
 
   handleSearchTypeChange = event => {
-    console.log(`setting search type ${JSON.stringify(event)}`);
-    this.setState({ searchType: event.target.value });
+    this.setState({ selectedSearchType: { id: event.value, name: event.label } });
   };
 
   searchTypes = {
@@ -36,7 +36,59 @@ class SearchBar extends Component {
 
    
   render() {
-    <Fragment>hi</Fragment>
+   return (
+              <Form className="post-form-area">
+                
+                <Form.Row className="justify-content-center form-wrap">
+                  <Form.Group
+                    controlId="searchType"
+                    className="col-md-8 post-form-group"
+                  >
+                    <Form.Label>Search By</Form.Label>
+                    <CustomSelect
+                      placeholder="Search By"
+                      onChange={this.handleSearchTypeChange}
+                      selectedOption={
+                        this.state.selectedSearchType
+                          ? {
+                              value: this.state.selectedSearchType.id,
+                              label: this.state.selectedSearchType.name
+                            }
+                          : null
+                      }
+                      defaultOptions={this.getSearchTypes()}
+                    />
+                  </Form.Group>
+                </Form.Row>
+                <Form.Row className="justify-content-center form-wrap">
+                  <Form.Group
+                    controlId="searchKeyword"
+                    className="col-md-8 post-form-group"
+                  >
+                    <Form.Label>Search For</Form.Label>
+                    <Form.Control
+                      as="input"
+                      placeholder="Enter a keyword to search"
+                      onChange={this.handleAddressChange}
+                    />
+                  </Form.Group>
+                </Form.Row>
+                <Form.Row className="justify-content-center form-wrap">
+                  <Form.Group
+                    controlId="postSubmitButton"
+                    className="col-sm-2 post-form-group"
+                  >
+                    <Button
+                      bsPrefix="btn btn-info"
+                      type="submit"
+                      href="#"
+                      onClick={this.onSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </Form.Group>
+                </Form.Row>
+              </Form>);
   }
 }
 
