@@ -1,9 +1,10 @@
 const path = require('path');
+const webpack = require('webpack');
 var ZipPlugin = require('zip-webpack-plugin');
 module.exports = {
   target: 'node',
   entry: {
-    search: './src/index.js',
+    index: './src/index.js',
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -19,5 +20,8 @@ module.exports = {
       },
     ],
   },
-  plugins: [new ZipPlugin({filename: 'app.zip'})],
+  plugins: [
+    new ZipPlugin({filename: 'app.zip'}),
+    new webpack.IgnorePlugin(/^pg-native$/),
+  ],
 };
