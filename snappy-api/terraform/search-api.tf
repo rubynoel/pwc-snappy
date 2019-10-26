@@ -8,10 +8,10 @@ resource "aws_api_gateway_rest_api" "search_api_gateway" {
 }
 
 data "template_file" search_api_swagger {
-  template = "${file("../search/swagger.yml")}"
+  template = "${file("../search/swagger.yaml")}"
 
-  vars = {
-    search_lambda_arn = "${aws_lambda_function.search_lambda.invoke_arn}"
+  vars {
+    search_lambda_arn = "${aws_lambda_function.get-tips-lambda.invoke_arn}"
   }
 }
 

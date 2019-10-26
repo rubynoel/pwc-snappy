@@ -7,12 +7,12 @@ resource "aws_lambda_permission" "search_lambda_permission" {
 }
 
 resource "aws_lambda_function" "search_lambda" {
-  filename         = "${file("${path.module}/../search/dist/app.zip")}"
+  filename         = "${file("../search/dist/app.zip")}"
   function_name    = "${local.resource_name_prefix}-search-handler"
   role             = "${aws_iam_role.search_lambda_role.arn}"
   handler          = "index.handler"
   runtime          = "nodejs8.10"
-  source_code_hash = "${filebase64sha256("${file("${path.module}/../search/dist/app.zip")}")}"
+  source_code_hash = "${filebase64sha256("${file("../search/app.zip")}")}"
   depends_on       = ["aws_iam_role_policy_attachment.search_lambda_role_policy_attachment"]
 }
 
