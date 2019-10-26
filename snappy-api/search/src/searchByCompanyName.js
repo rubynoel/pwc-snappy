@@ -1,11 +1,15 @@
 'use strict';
 
+const errors = {
+  KEYWORD_MISSING_ERR: 'Company Name is not passed or blank or undefined',
+};
 const searchByCompanyName = async (pool, searchParams) => {
   const client = await pool.connect();
   try {
     console.log(`Connected to db ${client}`);
-    // const queryResponse = await client.query(queries.createTmpTableQuery());
-    // console.log(`Search Query Response ${JSON.stringify(queryResponse)}`);
+    if (!searchParams.keyword) {
+      throw new Error(errors.KEYWORD_MISSING_ERR);
+    }
   } catch (e) {
     throw e;
   } finally {
