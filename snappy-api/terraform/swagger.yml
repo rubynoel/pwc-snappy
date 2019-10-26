@@ -21,6 +21,12 @@ paths:
           in: query
           required: false
           type: integer
+          description: "Offset for search results pagination. Default is 0"
+        - name: limit
+          in: query
+          required: false
+          type: integer
+          description: "Page limit for search results pagination. Default is 100"
       produces:
         - application/json
       responses:
@@ -35,6 +41,22 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: POST
         type: aws_proxy
+  /search:
+    options:
+      description: "OPTIONS method for Cors"
+      produces:
+        - application/json
+      x-amazon-apigateway-integration:
+        type: mock
+        passthroughBehavior: "when_no_match"
+        httpMethod: POST
+        default:
+          statusCode: "200"
+          responseParameters:
+            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+            method.response.header.test-method-response-header: "'static value'"
+            method.response.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST,PUT'"
+            method.response.header.Access-Control-Allow-Origin: "'*'"
 
 definitions:
   SearchResponse:

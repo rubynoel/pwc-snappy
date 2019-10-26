@@ -7,7 +7,7 @@ resource "aws_lambda_permission" "search_lambda_permission" {
 }
 
 resource "aws_lambda_function" "search_lambda" {
-  filename         = "${file("${path.module}/../search/dist/app.zip")}"
+  filename         = "${file("${path.module}/../search/dist/index.js")}"
   function_name    = "${local.resource_name_prefix}-search-handler"
   role             = "${aws_iam_role.search_lambda_role.arn}"
   handler          = "index.handler"
