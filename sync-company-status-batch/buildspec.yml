@@ -6,7 +6,8 @@ phases:
       docker: 18
   pre_build:
     commands:
-      - echo Logging in to Amazon ECR...
+      - echo "Testing webhook "$CODEBUILD_WEBHOOK_TRIGGER
+      - echo "Logging in to Amazon ECR..."
       - aws --version
       - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
       - REPOSITORY_URI=$ECR_REPO_URL/$ECR_REPO_NAME
