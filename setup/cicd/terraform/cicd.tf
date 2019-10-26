@@ -164,4 +164,22 @@ resource "aws_codepipeline" "pipeline" {
     }
   }
 
+  stage {
+    name = "BuildAndDeploySnappyUI"
+
+    action {
+      name             = "BuildAndDeploySnappyUI"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["ui_build_output"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = "${aws_codebuild_project.codebuild_ui_project.name}"
+      }
+    }
+  }
+
 }
