@@ -18,7 +18,7 @@ const queries = {
       search.restricted_flag, search.service_name, 
       search.tagline, search.email  
       FROM company_master as search 
-      WHERE search.restricted_flag is $1 
+      WHERE search.restricted_flag = $1 
       ORDER BY search.updated_on DESC
       offset $2 limit $3`,
       values: [restricted, offset, limit],
@@ -28,7 +28,7 @@ const queries = {
     return {
       text: `SELECT count(search.business_number)  
       FROM company_master as search 
-      WHERE search.restricted_flag is $1`,
+      WHERE search.restricted_flag = $1`,
       values: [restricted],
     };
   },
@@ -43,10 +43,12 @@ const searchByRestrictedStatus = async (pool, searchParams) => {
       restrictedFlag === restrictedStatus.RESTRICTED ? true : false;
     console.log(
         `query is ${restrictedFlag}  ${restrictedFlagQueryParam} 
-        and ${queries.findByRestrictedStatus(
-      restrictedFlagQueryParam,
-      offset,
-      limit,
+        and ${JSON.stringify(
+      queries.findByRestrictedStatus(
+          restrictedFlagQueryParam,
+          offset,
+          limit,
+      ),
   )}`,
     );
     const queryResponse = await client.query(
