@@ -11,7 +11,9 @@ const getParameter = (paramName) => {
     Name: paramName,
     WithDecryption: true,
   };
+  console.log(`paramName is ${paramName}`);
   const data = ssm.getParameter(params);
+  console.log(`data is ${JSON.stringify(data)}`);
   return data.Parameter.Value;
 };
 
