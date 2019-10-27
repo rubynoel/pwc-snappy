@@ -23,6 +23,18 @@ const queries = {
       values: [keyword, offset, limit],
     };
   },
+  countFindByCompanyName: (keyword) => {
+    return {
+      text: `SELECT count(search.business_number) FROM (
+          SELECT mas.business_number, mas.name,
+          mas.restricted_flag, mas.service_name, 
+          mas.tagline, mas.email, 
+          to_tsvector(mas.name) as document 
+          FROM company_master mas) as search 
+          WHERE search.document @@ to_tsquery($1)`,
+      values: [keyword],
+    };
+  },
 };
 
 const searchByCompanyName = async (pool, searchParams) => {
@@ -35,6 +47,14 @@ const searchByCompanyName = async (pool, searchParams) => {
         queries.findByCompanyName(keyword, offset, limit),
     );
     console.log(`Search response is ${JSON.stringify(queryResponse)}`);
+    const countQueryResponse = await client.query(
+        queries.countFindByCompanyName(keyword),
+    );
+    console.log(`Search response is ${JSON.stringify(countQueryResponse)}`);
+    return {
+      queryResponse: queryResponse,
+      countQueryResponse: countQueryResponse,
+    };
   } catch (e) {
     console.error(e.stack);
     throw e;

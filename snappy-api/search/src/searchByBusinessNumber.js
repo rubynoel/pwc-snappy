@@ -10,7 +10,7 @@ const queries = {
     return {
       text: `SELECT search.business_number, search.name,
       search.restricted_flag, search.service_name, 
-      search.tagline, search.email FROM 
+      search.tagline, search.email 
           FROM company_master as search 
           WHERE search.business_number = $1`,
       values: [businessNumber],
@@ -26,6 +26,9 @@ const searchByBusinessNumber = async (pool, searchParams) => {
         queries.findByBusinessNumber(searchParams.businessNumber),
     );
     console.log(`Search response is ${JSON.stringify(queryResponse)}`);
+    return {
+      queryResponse: queryResponse,
+    };
   } catch (e) {
     console.error(e.stack);
     throw e;

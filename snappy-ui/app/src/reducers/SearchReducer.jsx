@@ -2,7 +2,7 @@ import {
   SEARCH_BEGIN,
   SEARCH_SUCCESS,
   SEARCH_FAILURE
-} from '../actions/SearchActions';
+} from "../actions/SearchActions";
 
 const initialState = {
   total: 0,
