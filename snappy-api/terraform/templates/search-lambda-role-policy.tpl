@@ -17,14 +17,14 @@
         "ec2:DeleteNetworkInterface"
       ],
       "Resource": "*",
-      "Effect": "AllowVPCActions"
+      "Effect": "Allow"
     },
     {
       "Action": [
         "ssm:GetParameter*"
       ],
       "Resource": "*",
-      "Effect": "AllowSSMActions"
+      "Effect": "Allow"
     }
   ]
 }
