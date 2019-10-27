@@ -3,9 +3,7 @@ const webpack = require('webpack');
 const ZipPlugin = require('zip-webpack-plugin');
 module.exports = {
   target: 'node',
-  entry: {
-    index: './src/index.js',
-  },
+  entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/',
