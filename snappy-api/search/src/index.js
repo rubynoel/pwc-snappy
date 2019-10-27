@@ -41,7 +41,7 @@ module.exports.handler = async (event, context) => {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
       },
-      body: JSON.stringify('Internal Error'),
+      body: JSON.stringify({error: 'Internal Error'}),
     };
   }
 

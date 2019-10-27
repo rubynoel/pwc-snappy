@@ -43,6 +43,9 @@ const searchByCompanyName = async (pool, searchParams) => {
     console.log(`Connected to db ${client}`);
     validate(searchParams);
     const {keyword, offset, limit} = searchParams;
+    console.log(
+        `query is ${queries.findByCompanyName(keyword, offset, limit)}`,
+    );
     const queryResponse = await client.query(
         queries.findByCompanyName(keyword, offset, limit),
     );
