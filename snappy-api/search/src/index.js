@@ -2,18 +2,18 @@
 
 const {search} = require('./search');
 
-exports.handler = async (event, context) => {
-  console.log('request: ' + JSON.stringify(event));
-
-  const {fieldName, fieldValue} = event.pathParameters ?
-    event.pathParameters :
-    {};
-  const {from, limit} = event.queryStringParameters ?
-    event.queryStringParameters :
-    {};
-
+module.exports.handler = async (event, context) => {
   let apiResponse = {};
   try {
+    console.log('request: ' + JSON.stringify(event));
+
+    const {fieldName, fieldValue} = event.pathParameters ?
+      event.pathParameters :
+      {};
+    const {from, limit} = event.queryStringParameters ?
+      event.queryStringParameters :
+      {};
+
     const searchResponse = await search({
       fieldName,
       fieldValue,

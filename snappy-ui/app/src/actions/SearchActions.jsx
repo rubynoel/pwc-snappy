@@ -32,12 +32,25 @@ const doSearch = async (dispatch, searchParams) => {
   dispatch(searchBegin(searchParams));
   const { searchKeyword, searchType } = searchParams;
   const { from, limit } = paginationDefaults;
-  const apiHost = "ftgq3a6bw2.execute-api.ap-southeast-2.amazonaws.com/dev";
+  const apiHost = "ftgq3a6bw2.execute-api.ap-southeast-2.amazonaws.com/test";
   const pathString = `/search/${searchType}/${searchKeyword}?${serializeQuery({
     from,
     limit
   })}`;
-  fetch(`https://${apiHost}${pathString}`)
+  const opts = {
+    method: "GET",
+    service: "execute-api",
+    region: "ap-southeast-2",
+    path: `${pathString}`,
+    host: apiHost,
+    // headers: { "x-tes": "ddsada" },
+    url: `https://${apiHost}${pathString}`
+  };
+
+  fetch(`${opts.url}`, {
+    mode: "cors",
+    method: "GET"
+  })
     .then(res => res.json())
     .then(json => {
       dispatch(searchSuccess(json));
