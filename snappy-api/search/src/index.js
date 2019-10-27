@@ -34,6 +34,7 @@ module.exports.handler = async (event, context) => {
       throw new Error(`Could not obtain search response`);
     }
   } catch (err) {
+    console.log(`Error is ${err.stack}`);
     apiResponse = {
       statusCode: 500,
       headers: {
