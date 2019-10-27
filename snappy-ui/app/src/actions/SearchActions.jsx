@@ -1,3 +1,5 @@
+import { signRequest } from "../auth/AuthUtil";
+
 const SEARCH_BEGIN = "SEARCH_BEGIN";
 const SEARCH_SUCCESS = "SEARCH_SUCCESS";
 const SEARCH_FAILURE = "SEARCH_FAILURE";
@@ -37,7 +39,7 @@ const doSearch = async (dispatch, searchParams) => {
     from,
     limit
   })}`;
-  const opts = {
+  /*const opts = {
     method: "GET",
     service: "execute-api",
     region: "ap-southeast-2",
@@ -45,11 +47,24 @@ const doSearch = async (dispatch, searchParams) => {
     host: apiHost,
     // headers: { "x-tes": "ddsada" },
     url: `https://${apiHost}${pathString}`
+  };*/
+
+  const opts = {
+    method: "GET",
+    service: "execute-api",
+    region: "ap-southeast-2",
+    path: `${pathString}`,
+    host: apiHost,
+    url: `https://${apiHost}${pathString}`
   };
 
-  fetch(`${opts.url}`, {
-    mode: "cors",
-    method: "GET"
+  var request = await signRequest(opts);
+  console.log(`API ${JSON.stringify(opts)}`);
+  console.log(`API ${JSON.stringify(process.env)}`);
+  console.log(`API ${JSON.stringify(request)}`);
+
+  fetch(opts.url, {
+    headers: request.headers
   })
     .then(res => res.json())
     .then(json => {
@@ -57,6 +72,11 @@ const doSearch = async (dispatch, searchParams) => {
       return json;
     })
     .catch(error => dispatch(searchFailure(error)));
+
+  /*fetch(`${opts.url}`, {
+    mode: "cors",
+    method: "GET"
+  })*/
 };
 
 const paginateItems = paginationParams => (dispatch, getState) => {

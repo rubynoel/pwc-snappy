@@ -109,7 +109,7 @@ definitions:
         description: "Total number of matched rows"
       rows:
         type: array
-        items:
+        rows:
           $ref: "#/definitions/SearchResultItem"
         description: "Search items"
     required:
@@ -119,7 +119,13 @@ definitions:
     type: object
     description: "Individual item in search results"
     properties:
+      businessNumber:
+        type: number
       companyName:
         type: string
+      restrictedFlag:
+        type: boolean
     required:
+      - businessNumber
       - companyName
+      - restrictedFlag

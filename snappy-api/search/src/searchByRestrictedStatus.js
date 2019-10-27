@@ -16,12 +16,20 @@ const queries = {
     return {
       text: `SELECT search.business_number, search.name,
       search.restricted_flag, search.service_name, 
-      search.tagline, search.email FROM 
+      search.tagline, search.email  
       FROM company_master as search 
-      WHERE search.business_number is $1
+      WHERE search.restricted_flag is $1
       ORDER BY search.updated_on DESC
       offset $2 limit $3`,
       values: [restricted, offset, limit],
+    };
+  },
+  countFindByRestrictedStatus: (restricted) => {
+    return {
+      text: `SELECT count(search.business_number)  
+      FROM company_master as search 
+      WHERE search.restricted_flag is $1`,
+      values: [restricted],
     };
   },
 };
@@ -31,14 +39,20 @@ const searchByRestrictedStatus = async (pool, searchParams) => {
   try {
     validate(searchParams);
     const {restrictedFlag, offset, limit} = searchParams;
+    const restrictedFlagQueryParam =
+      restrictedFlag === restrictedStatus.RESTRICTED ? true : false;
     const queryResponse = await client.query(
-        queries.findByRestrictedStatus(
-        restrictedFlag === restrictedStatus.RESTRICTED ? true : false,
-        ),
-        offset,
-        limit,
+        queries.findByRestrictedStatus(restrictedFlagQueryParam, offset, limit),
     );
     console.log(`Search response is ${JSON.stringify(queryResponse)}`);
+    const countQueryResponse = await client.query(
+        queries.countFindByRestrictedStatus(restrictedFlagQueryParam),
+    );
+    console.log(`Search response is ${JSON.stringify(countQueryResponse)}`);
+    return {
+      queryResponse: queryResponse,
+      countQueryResponse: countQueryResponse,
+    };
   } catch (e) {
     console.error(e.stack);
     throw e;

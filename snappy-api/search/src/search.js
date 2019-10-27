@@ -47,7 +47,35 @@ const search = async (params) => {
       break;
   }
   console.log(`${searchResults}`);
-  return {total: 1000, rows: [{companyName: 'dummy'}]};
+  let response = {};
+  if (
+    searchResults &&
+    searchResults.queryResponse &&
+    searchResults.queryResponse.rows &&
+    searchResults.queryResponse.rows.length > 0
+  ) {
+    const rows = searchResults.rows.map((record) => {
+      return {
+        businessNumber: record.business_number,
+        name: record.name,
+        restrictedFlag: record.restricted_flag,
+        service: record.service_name,
+        tagline: record.tagline,
+        email: record.email,
+      };
+    });
+    response = {
+      rows: rows,
+      total: searchResults.countQueryResponse.rows[0].count,
+    };
+  } else {
+    response = {
+      rows: [],
+      total: 0,
+    };
+  }
+
+  return response;
 };
 
 const errorMessages = {
