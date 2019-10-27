@@ -1,6 +1,6 @@
-const SEARCH_BEGIN = 'SEARCH_BEGIN';
-const SEARCH_SUCCESS = 'SEARCH_SUCCESS';
-const SEARCH_FAILURE = 'SEARCH_FAILURE';
+const SEARCH_BEGIN = "SEARCH_BEGIN";
+const SEARCH_SUCCESS = "SEARCH_SUCCESS";
+const SEARCH_FAILURE = "SEARCH_FAILURE";
 
 const searchBegin = searchParams => ({
   type: SEARCH_BEGIN,
@@ -17,60 +17,56 @@ const searchFailure = error => ({
   payload: { error }
 });
 
-const paginateItems = paginationParams => {
-  console.log(`Pagination request ${JSON.stringify(paginationParams)}`);
-  return (dispatch, getState) => {
-    const searchState = getState().search;
-    console.log(`getState ${JSON.stringify(searchState)}`);
-
-    let { from } = searchState.searchParams;
-    console.log(`searchParams ${from}`);
-    if (paginationParams.prev) {
-      from = from > 0 ? from - searchState.limit : from;
-    } else if (paginationParams.next) {
-      from =
-        from === searchState.total - searchState.limit
-          ? from
-          : from + searchState.limit;
-    } else {
-      console.log(`else ${paginationParams.pageNumber * searchState.limit}`);
-      from =
-        paginationParams.pageNumber * searchState.limit - searchState.limit;
-    }
-    console.log(`else ${from}`);
-    const newParams = { ...searchState.searchParams, from };
-
-    console.log(`pagination to search params:${JSON.stringify(newParams)}`);
-    return doSearch(dispatch, newParams);
-  };
-};
-
-const searchItems = searchParams => {
-  console.log(`new search :${JSON.stringify(searchParams)}`);
-  return dispatch => doSearch(dispatch, searchParams);
-};
-
-const doSearch = async (dispatch, searchParams) => {
-  dispatch(searchBegin(searchParams));
-  const { keyword } = searchParams;
-  const query = keyword ? { keyword } : {};
-  const apiHost = 'u7ae551eta.execute-api.ap-southeast-2.amazonaws.com';
-  const pathString = `/search?${serializeQuery(searchParams)}`;
-  fetch(`https://${apiHost}${pathString}`)
-    .then(res => res.json())
-    .then(json => {
-      console.log(`${JSON.stringify(json)}`);
-      dispatch(searchSuccess(json));
-      return json;
-    })
-    .catch(error => dispatch(searchFailure(error)));
+const paginationDefaults = {
+  from: 0,
+  limit: 100
 };
 
 const serializeQuery = query =>
   Object.keys(query)
     .filter(key => query[key] !== undefined && query[key] !== null)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
-    .join('&');
+    .join("&");
+
+const doSearch = async (dispatch, searchParams) => {
+  dispatch(searchBegin(searchParams));
+  const { searchKeyword, searchType } = searchParams;
+  const { from, limit } = paginationDefaults;
+  const apiHost = "ftgq3a6bw2.execute-api.ap-southeast-2.amazonaws.com/dev";
+  const pathString = `/search/${searchType}/${searchKeyword}?${serializeQuery({
+    from,
+    limit
+  })}`;
+  fetch(`https://${apiHost}${pathString}`)
+    .then(res => res.json())
+    .then(json => {
+      dispatch(searchSuccess(json));
+      return json;
+    })
+    .catch(error => dispatch(searchFailure(error)));
+};
+
+const paginateItems = paginationParams => (dispatch, getState) => {
+  const searchState = getState().search;
+
+  let { from } = searchState.searchParams;
+  if (paginationParams.prev) {
+    from = from > 0 ? from - searchState.limit : from;
+  } else if (paginationParams.next) {
+    from =
+      from === searchState.total - searchState.limit
+        ? from
+        : from + searchState.limit;
+  } else {
+    from = paginationParams.pageNumber * searchState.limit - searchState.limit;
+  }
+  const newParams = { ...searchState.searchParams, from };
+
+  return doSearch(dispatch, newParams);
+};
+
+const searchItems = searchParams => dispatch =>
+  doSearch(dispatch, searchParams);
 
 export {
   SEARCH_BEGIN,
