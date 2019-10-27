@@ -11,15 +11,17 @@ const searchFields = {
   RESTRICTED_STATUS: 'restrictedStatus',
 };
 
-const pageLimitMax = 100;
+const paginationDefaults = {offset: 0, limit: 100};
 
 const search = async (params) => {
   validate(params);
   const {fieldName, fieldValue, from, limit, isMocked, poolMock} = params;
   const pgPool = isMocked ? poolMock : await getPool();
+  const defaultLimit = paginationDefaults.limit;
+  const defaultOffset = paginationDefaults.offset;
   const pageLimit =
-    limit && limit > 0 && limit <= pageLimitMax ? limit : pageLimitMax;
-  const offset = from ? from : 0;
+    !isNaN(limit) && limit > 0 && limit <= defaultLimit ? limit : defaultLimit;
+  const offset = !isNaN(from) ? from : defaultOffset;
   let searchResults = {};
   switch (fieldName) {
     case searchFields.COMPANY_NAME:
@@ -55,15 +57,12 @@ const errorMessages = {
 
 const validate = (searchParams) => {
   const errors = [];
-  const {fieldName, fieldValue, from, limit} = searchParams;
+  const {fieldName, fieldValue} = searchParams;
   if (!fieldName) {
     errors.push(errorMessages.FIELDNAME_MISSING_ERR);
   }
   if (!fieldValue) {
     errors.push(errorMessages.FIELDVALUE_MISSING_ERR);
-  }
-  if (from && (from < 0 || (limit && from >= limit))) {
-    errors.push(errorMessages.OFFSET_MISSING_ERR);
   }
 
   if (errors.length > 0) throw new Error(errors.join('. '));
