@@ -13,20 +13,19 @@ const getParameter = async (paramName) => {
   };
   console.log(`paramName is ${paramName}`);
   const data = await ssm.getParameter(params).promise();
-  console.log(`data is ${data}`);
+  console.log(`data is ${data.Parameter.Value}`);
   return data.Parameter.Value;
 };
 
 const getPool = async () => {
   const pool = new Pool({
-    user: await getParameter(process.env['SSM_KEY_DB_USER']),
-    host: await getParameter(process.env['SSM_KEY_DB_HOST']),
-    database: await getParameter(process.env['SSM_KEY_DB_NAME']),
-    password: await getParameter(process.env['SSM_KEY_DB_PASSWORD']),
-    port: await getParameter(process.env['SSM_KEY_DB_PORT']),
+    user: await getParameter('/pwc-snappy/dev/rds/username/master'),
+    host: await getParameter('/pwc-snappy/dev/rds/address'),
+    database: await getParameter('/pwc-snappy/dev/rds/database_name'),
+    password: await getParameter('/pwc-snappy/dev/rds/password/master'),
+    port: await getParameter('/pwc-snappy/dev/rds/port'),
   });
-  console.log(`pool is ${pool}`);
   return pool;
 };
 
-module.exports = {getPool};
+getPool();
