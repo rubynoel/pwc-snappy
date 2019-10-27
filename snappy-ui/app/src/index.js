@@ -7,12 +7,21 @@ import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import combineReducers from "./reducers/RootReducer";
-
+import Amplify from "aws-amplify";
+import { Authenticator, SignIn, Greetings } from "aws-amplify-react";
+import config from "./aws-exports";
+Amplify.configure(config);
 const store = createStore(combineReducers, applyMiddleware(thunk));
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <div>
+      <Authenticator hideDefault={true} amplifyConfig={config}>
+        <Greetings />
+        <SignIn />
+        <App />
+      </Authenticator>
+    </div>
   </Provider>,
   document.getElementById("root")
 );
