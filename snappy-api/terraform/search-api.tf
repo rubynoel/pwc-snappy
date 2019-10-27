@@ -2,6 +2,9 @@ resource "aws_api_gateway_rest_api" "search_api_gateway" {
   name        = "${local.resource_name_prefix}-search-api"
   description = "API to search company database"
   body        = "${data.template_file.search_api_swagger.rendered}"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
   lifecycle {
     create_before_destroy = true
   }
