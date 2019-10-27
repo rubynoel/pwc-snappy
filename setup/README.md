@@ -13,10 +13,6 @@ Login to the instance to execute the setup scripts in this repository. The insta
 
 - If you wish to execute the scripts from outside AWS, the scripts need to be modified to pass the AWS account id to it instead of inferring the account id from the ec2 metadata url. Also the user/role used to execute the scripts must be granted permission to assume the provisioning role.
 
-## GitHub Personal Access Token ......................
-
-TODO env.sh
-
 ## Executing the scripts
 
 From the root of the repository, execute the following

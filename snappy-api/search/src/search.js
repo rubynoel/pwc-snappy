@@ -16,7 +16,7 @@ const pageLimitMax = 100;
 const search = async (params) => {
   validate(params);
   const {fieldName, fieldValue, from, limit, isMocked, poolMock} = params;
-  const pgPool = isMocked ? poolMock : getPool();
+  const pgPool = isMocked ? poolMock : await getPool();
   const pageLimit =
     limit && limit > 0 && limit <= pageLimitMax ? limit : pageLimitMax;
   const offset = from ? from : 0;
