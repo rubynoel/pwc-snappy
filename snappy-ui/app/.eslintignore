@@ -1,0 +1,3 @@
+src/serviceWorker.js
+*.test.js
+build/

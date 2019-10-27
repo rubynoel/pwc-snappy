@@ -1,9 +1,13 @@
-import { SEARCH_BEGIN, SEARCH_SUCCESS, SEARCH_FAILURE } from "../actions/SearchActions";
+import {
+  SEARCH_BEGIN,
+  SEARCH_SUCCESS,
+  SEARCH_FAILURE
+} from '../actions/SearchActions';
 
 const initialState = {
   total: 0,
   limit: 2,
-  rows: [ ],
+  rows: [],
   loading: false,
   error: null
 };

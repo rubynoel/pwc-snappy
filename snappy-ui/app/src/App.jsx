@@ -3,12 +3,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SearchPanel from './components/SearchPanel';
 
 class App extends Component {
-  state = {  }
   render() {
     return (
-     <Fragment><SearchPanel/></Fragment>
+      <>
+        <SearchPanel />
+      </>
     );
   }
 }
- 
+
 export default App;
