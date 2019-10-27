@@ -14,6 +14,26 @@ resource "aws_lambda_function" "search_lambda" {
   runtime          = "nodejs8.10"
   source_code_hash = "${filebase64sha256("${path.module}/../search/dist/app.zip")}"
   depends_on       = ["aws_iam_role_policy_attachment.search_lambda_role_policy_attachment"]
+
+  vpc_config {
+    subnet_ids = split(",", data.aws_ssm_parameter.param_private_subnet_ids.value)
+    security_group_ids = [
+      "${data.aws_ssm_parameter.default_security_group_id.value}" #TODO: Create a separate security group
+    ]
+  }
+
+  environment {
+    variables = {
+      STAGE               = "${var.stage}"
+      APPLICATION_ID      = "${var.application_id}"
+      RESOURCE_REGION     = "${var.aws_region}"
+      SSM_KEY_DB_HOST     = "${data.aws_ssm_parameter.rds_postgres_address.name}"
+      SSM_KEY_DB_NAME     = "${data.aws_ssm_parameter.rds_postgres_database_name.name}"
+      SSM_KEY_DB_PORT     = "${data.aws_ssm_parameter.rds_postgres_database_port.name}"
+      SSM_KEY_DB_USER     = "${data.aws_ssm_parameter.rds_postgres_username.name}"
+      SSM_KEY_DB_PASSWORD = "${data.aws_ssm_parameter.rds_postgres_password.name}"
+    }
+  }
 }
 
 resource "aws_iam_role" "search_lambda_role" {

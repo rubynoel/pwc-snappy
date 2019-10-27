@@ -9,6 +9,22 @@
       ],
       "Resource": "arn:aws:logs:*:*:*",
       "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:CreateNetworkInterface",
+        "ec2:DeleteNetworkInterface"
+      ],
+      "Resource": "*",
+      "Effect": "AllowVPCActions"
+    },
+    {
+      "Action": [
+        "ssm:GetParameter*"
+      ],
+      "Resource": "*",
+      "Effect": "AllowSSMActions"
     }
   ]
 }
