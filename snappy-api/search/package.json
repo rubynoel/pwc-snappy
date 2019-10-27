@@ -8,7 +8,6 @@
   },
   "scripts": {
     "build": "npm install webpack webpack-cli && ./node_modules/.bin/webpack",
-    "buildtest": "npm install && zip -r ./dist/test.zip .",
     "test": "./node_modules/.bin/jest",
     "lint": "eslint --fix ."
   },

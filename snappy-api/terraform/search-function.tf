@@ -14,6 +14,7 @@ resource "aws_lambda_function" "search_lambda" {
   runtime          = "nodejs8.10"
   source_code_hash = "${filebase64sha256("${path.module}/../search/dist/app.zip")}"
   depends_on       = ["aws_iam_role_policy_attachment.search_lambda_role_policy_attachment"]
+  publish          = true
 
   vpc_config {
     subnet_ids = split(",", data.aws_ssm_parameter.param_private_subnet_ids.value)
@@ -34,6 +35,13 @@ resource "aws_lambda_function" "search_lambda" {
       SSM_KEY_DB_PASSWORD = "${data.aws_ssm_parameter.rds_postgres_password.name}"
     }
   }
+}
+
+resource "aws_lambda_alias" "search_lambda_alias" {
+  name             = "${local.resource_name_prefix}-search-alias"
+  function_name    = "${aws_lambda_function.search_lambda.arn}"
+  function_version = "$LATEST"
+
 }
 
 resource "aws_iam_role" "search_lambda_role" {
