@@ -12,15 +12,12 @@ class CustomSelect extends Component {
 
   handleChange = selectedOption => {
     this.setState({ selectedOption });
-    console.log(`Option selected:`, selectedOption);
     this.props.onChange(selectedOption);
   };
 
   render() {
     const { selectedOption } = this.props;
-    console.log(`selectedOption is ${JSON.stringify(selectedOption)}`);
     let x = true;
-    // console.log(`${this.props.defaultOptions}`);
     return (
       <Select
         value={selectedOption}
