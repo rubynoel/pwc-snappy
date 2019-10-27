@@ -6,7 +6,6 @@
       "Effect": "Allow",
       "Action": [
         "kms:Create*",
-        "iam:GetRole",
         "kms:List*",
         "kms:UntagResource",
         "kms:Update*",
@@ -32,11 +31,8 @@
     {
       "Sid": "VisualEditor2",
       "Effect": "Allow",
-      "Action": "iam:*",
-      "Resource": [
-        "arn:aws:iam::*:policy/pwc-snappy*",
-        "arn:aws:iam::*:role/pwc-snappy*"
-      ]
+      "Action": ["iam:Get*", "iam:List*", "iam:Create*"],
+      "Resource": ["*"]
     },
     {
       "Sid": "VisualEditor3",
@@ -62,27 +58,114 @@
       }
     },
     {
+      "Sid": "AllowIAMActionsForSnappyByResourceTag",
+      "Effect": "Allow",
+      "Action": "iam:*",
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "aws:ResourceTag/ApplicationId": "pwc-snappy"
+        }
+      }
+    },
+    {
+      "Sid": "AllowIAMActionsForSnappyByRequestTag",
+      "Effect": "Allow",
+      "Action": "iam:*",
+      "Resource": "*",
+      "Condition": {
+        "StringLike": {
+          "aws:RequestTag/ApplicationId": "pwc-snappy"
+        }
+      }
+    },
+    {
+      "Sid": "AllowIAMActionsForSnappyByResourceName",
+      "Effect": "Allow",
+      "Action": "iam:*",
+      "Resource": [
+        "arn:aws:iam::*:policy/pwc-snappy*",
+        "arn:aws:iam::*:role/pwc-snappy*",
+        "arn:aws:iam::*:role/pwc-snappy*/*",
+        "arn:aws:iam::*:policy/pwc-snappy*/*"
+      ]
+    },
+    {
       "Sid": "AllowEC2CreateActions",
       "Effect": "Allow",
-      "Action": ["ec2:CreateVPC", "ec2:CreateSubnet"],
+      "Action": ["ec2:Create*"],
       "Resource": "*"
     },
     {
       "Sid": "AllowOtherEC2Actions",
       "Effect": "Allow",
       "Action": [
-        "ec2:DescribeDhcpOptions",
-        "ec2:DescribeNetworkInterfaces",
         "ec2:DeleteNetworkInterface",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeVpcs",
-        "ec2:DescribeAddresses",
         "ec2:AllocateAddress",
         "ec2:AssociateAddress",
-        "ec2:DescribeTags",
+        "ec2:Describe*",
         "ec2:CreateTags"
       ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowCodePipelineActions",
+      "Effect": "Allow",
+      "Action": ["codepipeline:*"],
+      "Resource": [
+        "arn:aws:codepipeline:*:*:pwc-snappy*",
+        "arn:aws:codepipeline:*:*:pwc-snappy*/*"
+      ]
+    },
+    {
+      "Sid": "AllowCodePipelineWebhookListActions",
+      "Effect": "Allow",
+      "Action": "codepipeline:ListWebhooks",
+      "Resource": "arn:aws:codepipeline:*:*:webhook:*"
+    },
+    {
+      "Sid": "AllowCodePipelineWebhookActions",
+      "Effect": "Allow",
+      "Action": "codepipeline:*",
+      "Resource": "arn:aws:codepipeline:*:*:webhook:pwc-snappy*"
+    },
+    {
+      "Sid": "AllowCodeBuildActions",
+      "Effect": "Allow",
+      "Action": "codebuild:*",
+      "Resource": [
+        "arn:aws:codebuild:*:*:project/pwc-snappy*",
+        "arn:aws:codebuild:*:*:project/pwc-snappy*/*"
+      ]
+    },
+    {
+      "Sid": "AllowSSMActionsForSnappy",
+      "Effect": "Allow",
+      "Action": "ssm:*",
+      "Resource": [
+        "arn:aws:ssm:*:*:parameter/pwc-snappy",
+        "arn:aws:ssm:*:*:parameter/pwc-snappy/*"
+      ]
+    },
+    {
+      "Sid": "AllowSSMRead",
+      "Effect": "Allow",
+      "Action": "ssm:Describe*",
+      "Resource": "*"
+    },
+    {
+      "Sid": "AllowECRActions",
+      "Effect": "Allow",
+      "Action": "ecr:*",
+      "Resource": [
+        "arn:aws:ecr:*:*:repository/pwc-snappy-*",
+        "arn:aws:ecr:*:*:repository/pwc-snappy-*/*"
+      ]
+    },
+    {
+      "Sid": "AllowECRGetAuthorizationToken",
+      "Effect": "Allow",
+      "Action": "ecr:GetAuthorizationToken",
       "Resource": "*"
     }
   ]

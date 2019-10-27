@@ -1,12 +1,16 @@
 import {
   SEARCH_BEGIN,
   SEARCH_SUCCESS,
-  SEARCH_FAILURE
+  SEARCH_FAILURE,
+  paginationDefaults
 } from "../actions/SearchActions";
 
 const initialState = {
+  searchParams: {
+    from: paginationDefaults.from,
+    limit: paginationDefaults.limit
+  },
   total: 0,
-  limit: 2,
   rows: [],
   loading: false,
   error: null

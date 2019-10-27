@@ -33,21 +33,15 @@ const serializeQuery = query =>
 const doSearch = async (dispatch, searchParams) => {
   dispatch(searchBegin(searchParams));
   const { searchKeyword, searchType } = searchParams;
-  const { from, limit } = paginationDefaults;
+  const {
+    from = paginationDefaults.from,
+    limit = paginationDefaults.limit
+  } = searchParams;
   const apiHost = "ftgq3a6bw2.execute-api.ap-southeast-2.amazonaws.com/test";
   const pathString = `/search/${searchType}/${searchKeyword}?${serializeQuery({
     from,
     limit
   })}`;
-  /*const opts = {
-    method: "GET",
-    service: "execute-api",
-    region: "ap-southeast-2",
-    path: `${pathString}`,
-    host: apiHost,
-    // headers: { "x-tes": "ddsada" },
-    url: `https://${apiHost}${pathString}`
-  };*/
 
   const opts = {
     method: "GET",
@@ -59,10 +53,6 @@ const doSearch = async (dispatch, searchParams) => {
   };
 
   var request = await signRequest(opts);
-  console.log(`API ${JSON.stringify(opts)}`);
-  console.log(`API ${JSON.stringify(process.env)}`);
-  console.log(`API ${JSON.stringify(request)}`);
-
   fetch(opts.url, {
     headers: request.headers
   })
@@ -72,29 +62,16 @@ const doSearch = async (dispatch, searchParams) => {
       return json;
     })
     .catch(error => dispatch(searchFailure(error)));
-
-  /*fetch(`${opts.url}`, {
-    mode: "cors",
-    method: "GET"
-  })*/
 };
 
 const paginateItems = paginationParams => (dispatch, getState) => {
   const searchState = getState().search;
 
-  let { from } = searchState.searchParams;
-  if (paginationParams.prev) {
-    from = from > 0 ? from - searchState.limit : from;
-  } else if (paginationParams.next) {
-    from =
-      from === searchState.total - searchState.limit
-        ? from
-        : from + searchState.limit;
-  } else {
-    from = paginationParams.pageNumber * searchState.limit - searchState.limit;
-  }
-  const newParams = { ...searchState.searchParams, from };
+  let { limit } = searchState.searchParams;
+  const { pageNumber } = paginationParams;
+  const from = pageNumber * limit;
 
+  const newParams = { ...searchState.searchParams, from };
   return doSearch(dispatch, newParams);
 };
 
@@ -106,5 +83,6 @@ export {
   SEARCH_SUCCESS,
   SEARCH_FAILURE,
   searchItems,
-  paginateItems
+  paginateItems,
+  paginationDefaults
 };

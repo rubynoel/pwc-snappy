@@ -2,38 +2,44 @@ import React, { Component, Fragment } from "react";
 import { Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import { paginateItems } from "../actions/SearchActions";
+import ReactPaginate from "react-paginate";
 
 class SearchResultsPanel extends Component {
-  state = {};
-
-  handlePageClick = (pageNumber, prev, next) => {
-    console.log("hello ", pageNumber, prev, next);
-    this.props.dispatch(paginateItems({ pageNumber, prev, next }));
+  handlePageClick = selected => {
+    this.props.dispatch(paginateItems({ pageNumber: selected }));
   };
 
   render = () => {
-    const data = [{ name: "test" }, { name: "testdsadsa" }];
+    const { pageTotal, items, itemsTotal } = this.props;
     return (
       <Fragment>
+        <p>{itemsTotal > 0 ? itemsTotal : "No"} Results</p>
+        {itemsTotal > 5 ? this.getPaginationBar() : null}
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>Business Number</th>
               <th>Company Name</th>
+              <th>Restricted Status</th>
               <th>Service</th>
               <th>Tagline</th>
               <th>Email</th>
             </tr>
           </thead>
           <tbody>
-            {data.map(row => {
+            {items.map(row => {
               return (
                 <tr>
+                  <td>{row.businessNumber}</td>
                   <td>{row.name}</td>
-                  <td>{row.name}</td>
-                  <td>{row.name}</td>
-                  <td>{row.name}</td>
-                  <td>{row.name}</td>
+                  <td>
+                    {row.restrictedFlag === true
+                      ? "Restricted"
+                      : "Not Restricted"}
+                  </td>
+                  <td>{row.service}</td>
+                  <td>{row.tagline}</td>
+                  <td>{row.email}</td>
                 </tr>
               );
             })}
@@ -44,32 +50,70 @@ class SearchResultsPanel extends Component {
     );
   };
 
-  getPaginationBar = () => {
-    let items = [];
-    if (this.props.pageTotal === 0) {
-      return <p>{this.props.pageTotal} Results</p>;
+  /*getPaginationBar = () => {
+    const { pageTotal } = this.props;
+    if (pageTotal > 0) {
+      return (
+        <Fragment>
+          <ReactPaginate
+            previousLabel={"<<"}
+            nextLabel={">>"}
+            breakLabel={"..."}
+            breakClassName={"break-me"}
+            pageCount={this.props.pageTotal}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={data => this.handlePageClick(data)}
+            containerClassName={"pagination"}
+            subContainerClassName={"pages pagination"}
+            activeClassName={"test"}
+          />
+        </Fragment>
+      );
+    } else {
+      return null;
     }
+  };*/
+  getPaginationBar = () => {
+    const { offset, limit, pageTotal } = this.props;
+    console.log(`offset ${offset} ${limit}`);
+    let items = [];
+    let active = 1;
 
-    if (this.props.pageTotal >= 10) {
-      for (
-        let number = this.props.pageTotal / 2 - 2;
-        number <= this.props.pageTotal / 4;
-        number++
-      ) {
-        items.push(<span onClick={() => this.handlePageClick(number)}>1</span>);
+    if (pageTotal >= 10) {
+      for (let number = pageTotal / 2 - 2; number <= pageTotal / 4; number++) {
+        items.push(
+          <span onClick={() => this.handlePageClick(number - 1)}>1</span>
+        );
       }
     } else {
-      for (let number = 1; number <= this.props.pageTotal; number++) {
+      for (let number = 1; number <= pageTotal; number++) {
         items.push(
-          <span onClick={() => this.handlePageClick(number)}>{number}</span>
+          <span onClick={() => this.handlePageClick(number - 1)}>{number}</span>
         );
       }
     }
     return (
       <div className="pagination">
-        <span onClick={() => this.handlePageClick(undefined, true)}>Prev</span>
+        <span
+          onClick={() =>
+            this.handlePageClick(
+              (offset >= limit ? offset - limit : 0) / limit
+            ) * limit
+          }
+        >
+          Prev
+        </span>
         {items.map(pageItem => pageItem)}
-        <span onClick={() => this.handlePageClick(undefined, undefined, true)}>
+        <span
+          onClick={() =>
+            this.handlePageClick(
+              ((offset + limit < pageTotal ? offset + limit : pageTotal - 1) /
+                limit) *
+                limit
+            )
+          }
+        >
           Next
         </span>
       </div>
@@ -80,7 +124,10 @@ class SearchResultsPanel extends Component {
 const mapStateToProps = state => {
   return {
     items: state.search.rows,
-    pageTotal: Math.ceil(state.search.total / state.search.limit)
+    itemsTotal: state.search.total,
+    pageTotal: Math.ceil(state.search.total / state.search.searchParams.limit),
+    offset: state.search.searchParams.from,
+    limit: state.search.searchParams.limit
   };
 };
 

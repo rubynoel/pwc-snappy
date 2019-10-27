@@ -3,13 +3,16 @@ import { Form, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import CustomSelect from "./CustomSelect";
-import { searchItems } from "../actions/SearchActions";
+import { searchItems, paginationDefaults } from "../actions/SearchActions";
+import { Formik } from "formik";
 
 class SearchBar extends Component {
   searchTypes = {
     SEARCH_BY_COMPANY_NAME: "companyName",
     SEARCH_BY_BUSINESS_NUMER: "businessNumber",
-    SEARCH_BY_RESTRICTED_STATUS: "restrictedStatus"
+    SEARCH_BY_RESTRICTED_STATUS_TRUE: "restricted",
+    SEARCH_BY_RESTRICTED_STATUS_FALSE: "notRestricted",
+    SEARCH_BY_RESTRICTED_STATUS_APIPARAM: "restrictedStatus"
   };
 
   constructor(props) {
@@ -17,21 +20,59 @@ class SearchBar extends Component {
     const { label, value } = this.getDefaultSearchType();
     this.state = {
       searchKeyword: null,
-      selectedSearchType: { id: value, name: label }
+      selectedSearchType: { id: value, name: label },
+      validationErrors: {}
     };
   }
 
   handleSearchClick = () => {
-    this.props.dispatch(
-      searchItems({
-        searchKeyword: this.state.searchKeyword,
-        searchType: this.state.selectedSearchType.id
-      })
-    );
+    console.log(`isnab ${!isNaN(this.state.searchKeyword)}`);
+    const { searchKeyword, selectedSearchType, validationErrors } = this.state;
+    if (
+      this.state.selectedSearchType.id ===
+        this.searchTypes.SEARCH_BY_BUSINESS_NUMER &&
+      isNaN(searchKeyword)
+    ) {
+      this.setState({
+        validationErrors: {
+          ...validationErrors,
+          ...{ searchKeyword: "Only numbers allowed" }
+        }
+      });
+    } else {
+      this.setState({
+        validationErrors: {}
+      });
+      let searchTypeApiParam = selectedSearchType.id;
+      let searchKeywordApiParam = searchKeyword;
+      if (
+        selectedSearchType.id ===
+          this.searchTypes.SEARCH_BY_RESTRICTED_STATUS_TRUE ||
+        selectedSearchType.id ===
+          this.searchTypes.SEARCH_BY_RESTRICTED_STATUS_FALSE
+      ) {
+        searchTypeApiParam = this.searchTypes
+          .SEARCH_BY_RESTRICTED_STATUS_APIPARAM;
+        searchKeywordApiParam =
+          selectedSearchType.id ===
+          this.searchTypes.SEARCH_BY_RESTRICTED_STATUS_TRUE
+            ? true
+            : false;
+      }
+
+      const { from, limit } = paginationDefaults;
+      this.props.dispatch(
+        searchItems({
+          searchKeyword: searchKeywordApiParam,
+          searchType: searchTypeApiParam,
+          from: from,
+          limit: limit
+        })
+      );
+    }
   };
 
   handleKeywordChange = event => {
-    console.log(`searching for keyword ${event.target.value}`);
     this.setState({ searchKeyword: event.target.value });
   };
 
@@ -41,20 +82,24 @@ class SearchBar extends Component {
     });
   };
 
-  getSearchTypes = () => [
+  getSearchTypeLOVs = () => [
     { label: "Company Name", value: this.searchTypes.SEARCH_BY_COMPANY_NAME },
     {
       label: "Business Number",
       value: this.searchTypes.SEARCH_BY_BUSINESS_NUMER
     },
     {
-      label: "Restricted Status",
-      value: this.searchTypes.SEARCH_BY_RESTRICTED_STATUS
+      label: "Restricted Companies",
+      value: this.searchTypes.SEARCH_BY_RESTRICTED_STATUS_TRUE
+    },
+    {
+      label: "Not Restricted Companies",
+      value: this.searchTypes.SEARCH_BY_RESTRICTED_STATUS_FALSE
     }
   ];
 
   getDefaultSearchType = () => {
-    return this.getSearchTypes()[0];
+    return this.getSearchTypeLOVs()[0];
   };
 
   render() {
@@ -68,7 +113,7 @@ class SearchBar extends Component {
           >
             <Form.Label>Search By</Form.Label>
             <CustomSelect
-              placeholder="Search By"
+              placeholder="Search Type"
               onChange={this.handleSearchTypeChange}
               selectedOption={
                 selectedSearchType
@@ -78,7 +123,7 @@ class SearchBar extends Component {
                     }
                   : this.getDefaultSearchType()
               }
-              defaultOptions={this.getSearchTypes()}
+              defaultOptions={this.getSearchTypeLOVs()}
             />
           </Form.Group>
         </Form.Row>
@@ -87,12 +132,23 @@ class SearchBar extends Component {
             controlId="searchKeyword"
             className="col-md-8 post-form-group"
           >
-            <Form.Label>Search For</Form.Label>
+            <Form.Label>Search Keyword</Form.Label>
             <Form.Control
               as="input"
               placeholder="Enter a keyword to search"
               onChange={this.handleKeywordChange}
+              disabled={
+                selectedSearchType.id ===
+                  this.searchTypes.SEARCH_BY_RESTRICTED_STATUS_TRUE ||
+                selectedSearchType.id ===
+                  this.searchTypes.SEARCH_BY_RESTRICTED_STATUS_FALSE
+              }
             />
+            {this.state.validationErrors.searchKeyword ? (
+              <div className="invalid-search-field">
+                {this.state.validationErrors.searchKeyword}
+              </div>
+            ) : null}
           </Form.Group>
         </Form.Row>
         <Form.Row className="justify-content-center form-wrap">
