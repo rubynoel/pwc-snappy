@@ -6,6 +6,10 @@ test('Lambda handler returns a valid api response', async () => {
     pathParameters: {
       fieldName: searchFields.COMPANY_NAME,
       fieldValue: 'Kris',
+      from: 1,
+    },
+    queryStringParameters: {
+      from: 1,
     },
   };
   const response = await handler(event);

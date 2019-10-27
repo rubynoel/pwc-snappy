@@ -11,9 +11,7 @@ const getParameter = async (paramName) => {
     Name: paramName,
     WithDecryption: true,
   };
-  console.log(`paramName is ${paramName}`);
   const data = await ssm.getParameter(params).promise();
-  console.log(`data is ${data}`);
   return data.Parameter.Value;
 };
 
@@ -25,7 +23,6 @@ const getPool = async () => {
     password: await getParameter(process.env['SSM_KEY_DB_PASSWORD']),
     port: await getParameter(process.env['SSM_KEY_DB_PORT']),
   });
-  console.log(`pool is ${pool}`);
   return pool;
 };
 

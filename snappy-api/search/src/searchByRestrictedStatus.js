@@ -41,24 +41,12 @@ const searchByRestrictedStatus = async (pool, searchParams) => {
     const {restrictedFlag, offset, limit} = searchParams;
     const restrictedFlagQueryParam =
       restrictedFlag === restrictedStatus.RESTRICTED ? true : false;
-    console.log(
-        `query is ${restrictedFlag}  ${restrictedFlagQueryParam} 
-        and ${JSON.stringify(
-      queries.findByRestrictedStatus(
-          restrictedFlagQueryParam,
-          offset,
-          limit,
-      ),
-  )}`,
-    );
     const queryResponse = await client.query(
         queries.findByRestrictedStatus(restrictedFlagQueryParam, offset, limit),
     );
-    console.log(`Search response is ${JSON.stringify(queryResponse)}`);
     const countQueryResponse = await client.query(
         queries.countFindByRestrictedStatus(restrictedFlagQueryParam),
     );
-    console.log(`Search response is ${JSON.stringify(countQueryResponse)}`);
     return {
       queryResponse: queryResponse,
       countQueryResponse: countQueryResponse,

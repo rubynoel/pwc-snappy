@@ -46,7 +46,6 @@ const search = async (params) => {
     default:
       break;
   }
-  console.log(`query response is ${response}`);
   let searchResults = {};
   if (
     response &&

@@ -25,7 +25,6 @@ const searchByBusinessNumber = async (pool, searchParams) => {
     const queryResponse = await client.query(
         queries.findByBusinessNumber(searchParams.businessNumber),
     );
-    console.log(`Search response is ${JSON.stringify(queryResponse)}`);
     return {
       queryResponse: queryResponse,
     };
