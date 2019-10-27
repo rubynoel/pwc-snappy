@@ -1,10 +1,10 @@
-const SEARCH_BEGIN = "SEARCH_BEGIN";
-const SEARCH_SUCCESS = "SEARCH_SUCCESS";
-const SEARCH_FAILURE = "SEARCH_FAILURE";
+const SEARCH_BEGIN = 'SEARCH_BEGIN';
+const SEARCH_SUCCESS = 'SEARCH_SUCCESS';
+const SEARCH_FAILURE = 'SEARCH_FAILURE';
 
 const searchBegin = searchParams => ({
   type: SEARCH_BEGIN,
-  searchParams: searchParams
+  searchParams
 });
 
 const searchSuccess = searchResults => ({
@@ -20,10 +20,10 @@ const searchFailure = error => ({
 const paginateItems = paginationParams => {
   console.log(`Pagination request ${JSON.stringify(paginationParams)}`);
   return (dispatch, getState) => {
-    var searchState = getState().search;
+    const searchState = getState().search;
     console.log(`getState ${JSON.stringify(searchState)}`);
 
-    let from = searchState.searchParams.from;
+    let { from } = searchState.searchParams;
     console.log(`searchParams ${from}`);
     if (paginationParams.prev) {
       from = from > 0 ? from - searchState.limit : from;
@@ -38,7 +38,7 @@ const paginateItems = paginationParams => {
         paginationParams.pageNumber * searchState.limit - searchState.limit;
     }
     console.log(`else ${from}`);
-    let newParams = { ...searchState.searchParams, from };
+    const newParams = { ...searchState.searchParams, from };
 
     console.log(`pagination to search params:${JSON.stringify(newParams)}`);
     return doSearch(dispatch, newParams);
@@ -47,23 +47,17 @@ const paginateItems = paginationParams => {
 
 const searchItems = searchParams => {
   console.log(`new search :${JSON.stringify(searchParams)}`);
-  return dispatch => {
-    return doSearch(dispatch, searchParams);
-  };
+  return dispatch => doSearch(dispatch, searchParams);
 };
 
 const doSearch = async (dispatch, searchParams) => {
   dispatch(searchBegin(searchParams));
-  const {keyword} = searchParams;
-  let query = keyword ? { keyword: keyword } : {};
-  let apiHost = "u7ae551eta.execute-api.ap-southeast-2.amazonaws.com";
-  let pathString = `/search?${serializeQuery(searchParams)}`;
-  fetch(
-    `https://${apiHost}${pathString}`
-  )
-    .then(res => {
-      return res.json();
-    })
+  const { keyword } = searchParams;
+  const query = keyword ? { keyword } : {};
+  const apiHost = 'u7ae551eta.execute-api.ap-southeast-2.amazonaws.com';
+  const pathString = `/search?${serializeQuery(searchParams)}`;
+  fetch(`https://${apiHost}${pathString}`)
+    .then(res => res.json())
     .then(json => {
       console.log(`${JSON.stringify(json)}`);
       dispatch(searchSuccess(json));
@@ -72,12 +66,11 @@ const doSearch = async (dispatch, searchParams) => {
     .catch(error => dispatch(searchFailure(error)));
 };
 
-const serializeQuery = query => {
-  return Object.keys(query)
+const serializeQuery = query =>
+  Object.keys(query)
     .filter(key => query[key] !== undefined && query[key] !== null)
     .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`)
-    .join("&");
-};
+    .join('&');
 
 export {
   SEARCH_BEGIN,
