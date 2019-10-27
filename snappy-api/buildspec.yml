@@ -18,7 +18,7 @@ phases:
   build:
     commands:
       - echo "Packaging application"
-      - cd snappy-api/search && npm run build && npm run test && cd ../..
+      - cd snappy-api/search && npm run build && cd ../..
       - echo "Running terraform validate..."
       - terraform init -backend=false snappy-api/terraform && terraform validate snappy-api/terraform
       - cd snappy-api/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
