@@ -45,16 +45,11 @@ const searchByCompanyName = async (pool, searchParams) => {
 // Validations specific to company name search
 const validate = (searchParams) => {
   const errors = [];
-  const {keyword, offset, limit} = searchParams;
+  const {keyword} = searchParams;
   if (!keyword) {
     errors.push(errorMessages.KEYWORD_MISSING_ERR);
   }
-  if (!offset || offset < 0 || (limit && offset >= limit)) {
-    errors.push(errorMessages.OFFSET_MISSING_ERR);
-  }
-  if (!limit) {
-    errors.push(errorMessages.LIMIT_MISSING_ERR);
-  }
+
   if (errors.length > 0) throw new Error(errors.join('. '));
 };
 
