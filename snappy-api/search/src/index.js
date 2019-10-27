@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-const {search} = require('./search');
+const { search } = require("./search");
 
-exports.handler = async (event, context) => {
-  console.log('request: ' + JSON.stringify(event));
+module.exports.handler = async (event, context) => {
+  console.log("request: " + JSON.stringify(event));
 
-  const {fieldName, fieldValue} = event.pathParameters ?
-    event.pathParameters :
-    {};
-  const {from, limit} = event.queryStringParameters ?
-    event.queryStringParameters :
-    {};
+  const { fieldName, fieldValue } = event.pathParameters
+    ? event.pathParameters
+    : {};
+  const { from, limit } = event.queryStringParameters
+    ? event.queryStringParameters
+    : {};
 
   let apiResponse = {};
   try {
@@ -18,17 +18,17 @@ exports.handler = async (event, context) => {
       fieldName,
       fieldValue,
       limit,
-      offset: from,
+      offset: from
     });
 
     if (searchResponse) {
       apiResponse = {
         statusCode: 200,
         headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
         },
-        body: JSON.stringify(searchResponse),
+        body: JSON.stringify(searchResponse)
       };
     } else {
       throw new Error(`Could not obtain search response`);
@@ -37,13 +37,13 @@ exports.handler = async (event, context) => {
     apiResponse = {
       statusCode: 500,
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*"
       },
-      body: JSON.stringify('Internal Error'),
+      body: JSON.stringify("Internal Error")
     };
   }
 
-  console.log('apiResponse: ' + JSON.stringify(apiResponse));
+  console.log("apiResponse: " + JSON.stringify(apiResponse));
   return apiResponse;
 };
