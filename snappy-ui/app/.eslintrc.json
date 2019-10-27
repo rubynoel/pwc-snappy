@@ -11,6 +11,7 @@
   "parser": "babel-eslint",
   "plugins": ["react", "prettier"],
   "rules": {
-    "jsx-quotes": ["error", "prefer-single"]
+    "jsx-quotes": ["error", "prefer-single"],
+    "react/destructuring-assignment": [1, "always"]
   }
 }
