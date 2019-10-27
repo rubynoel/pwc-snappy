@@ -66,7 +66,12 @@ const search = async (params) => {
     });
     searchResults = {
       rows: rows,
-      total: response.countQueryResponse.rows[0].count,
+      total:
+        response.countQueryResponse &&
+        response.countQueryResponse.rows &&
+        response.countQueryResponse.rows.length > 0 ?
+          response.countQueryResponse.rows[0].count :
+          response.queryResponse.rows.length,
     };
   } else {
     searchResults = {
