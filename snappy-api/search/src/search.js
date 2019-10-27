@@ -22,22 +22,22 @@ const search = async (params) => {
   const pageLimit =
     !isNaN(limit) && limit > 0 && limit <= defaultLimit ? limit : defaultLimit;
   const offset = !isNaN(from) ? from : defaultOffset;
-  let searchResults = {};
+  let response = {};
   switch (fieldName) {
     case searchFields.COMPANY_NAME:
-      searchResults = await searchByCompanyName(pgPool, {
+      response = await searchByCompanyName(pgPool, {
         keyword: fieldValue,
         offset: offset,
         limit: pageLimit,
       });
       break;
     case searchFields.BUSINESS_NUMER:
-      searchResults = await searchByBusinessNumber(pgPool, {
+      response = await searchByBusinessNumber(pgPool, {
         businessNumber: fieldValue,
       });
       break;
     case searchFields.RESTRICTED_STATUS:
-      searchResults = await searchByRestrictedStatus(pgPool, {
+      response = await searchByRestrictedStatus(pgPool, {
         restrictedFlag: fieldValue,
         offset: offset,
         limit: pageLimit,
@@ -46,15 +46,15 @@ const search = async (params) => {
     default:
       break;
   }
-  console.log(`${searchResults}`);
-  let response = {};
+  console.log(`query response is ${response}`);
+  let searchResults = {};
   if (
-    searchResults &&
-    searchResults.queryResponse &&
-    searchResults.queryResponse.rows &&
-    searchResults.queryResponse.rows.length > 0
+    response &&
+    response.queryResponse &&
+    response.queryResponse.rows &&
+    response.queryResponse.rows.length > 0
   ) {
-    const rows = searchResults.rows.map((record) => {
+    const rows = response.queryResponse.rows.map((record) => {
       return {
         businessNumber: record.business_number,
         name: record.name,
@@ -64,18 +64,18 @@ const search = async (params) => {
         email: record.email,
       };
     });
-    response = {
+    searchResults = {
       rows: rows,
-      total: searchResults.countQueryResponse.rows[0].count,
+      total: response.countQueryResponse.rows[0].count,
     };
   } else {
-    response = {
+    searchResults = {
       rows: [],
       total: 0,
     };
   }
 
-  return response;
+  return searchResults;
 };
 
 const errorMessages = {
