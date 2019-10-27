@@ -12,14 +12,16 @@ const errorMessages = {
 };
 
 const queries = {
-  findByRestrictedStatus: (restricted) => {
+  findByRestrictedStatus: (restricted, offset, limit) => {
     return {
       text: `SELECT search.business_number, search.name,
       search.restricted_flag, search.service_name, 
       search.tagline, search.email FROM 
       FROM company_master as search 
-      WHERE search.business_number is $1`,
-      values: [restricted],
+      WHERE search.business_number is $1
+      ORDER BY search.updated_on DESC
+      offset $2 limit $3`,
+      values: [restricted, offset, limit],
     };
   },
 };
@@ -28,12 +30,13 @@ const searchByRestrictedStatus = async (pool, searchParams) => {
   const client = await pool.connect();
   try {
     validate(searchParams);
+    const {restrictedFlag, offset, limit} = searchParams;
     const queryResponse = await client.query(
         queries.findByRestrictedStatus(
-        searchParams.restrictedFlag === restrictedStatus.RESTRICTED ?
-          true :
-          false,
+        restrictedFlag === restrictedStatus.RESTRICTED ? true : false,
         ),
+        offset,
+        limit,
     );
     console.log(`Search response is ${JSON.stringify(queryResponse)}`);
   } catch (e) {

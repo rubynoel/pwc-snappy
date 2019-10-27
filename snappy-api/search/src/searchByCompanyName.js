@@ -7,7 +7,7 @@ const errorMessages = {
 };
 
 const queries = {
-  findByCompanyName: (keyword) => {
+  findByCompanyName: (keyword, offset, limit) => {
     return {
       text: `SELECT search.business_number, search.name,
       search.restricted_flag, search.service_name, 
@@ -20,7 +20,7 @@ const queries = {
           WHERE search.document @@ to_tsquery($1)
           ORDER BY ts_rank(search.document, to_tsquery('english', $1)) DESC
           offset $2 limit $3`,
-      values: [keyword],
+      values: [keyword, offset, limit],
     };
   },
 };
@@ -30,8 +30,9 @@ const searchByCompanyName = async (pool, searchParams) => {
   try {
     console.log(`Connected to db ${client}`);
     validate(searchParams);
+    const {keyword, offset, limit} = searchParams;
     const queryResponse = await client.query(
-        queries.findByCompanyName(searchParams.keyword),
+        queries.findByCompanyName(keyword, offset, limit),
     );
     console.log(`Search response is ${JSON.stringify(queryResponse)}`);
   } catch (e) {
