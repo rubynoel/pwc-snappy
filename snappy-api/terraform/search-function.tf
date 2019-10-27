@@ -3,9 +3,9 @@ resource "aws_lambda_permission" "search_lambda_permission" {
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.search_lambda.arn}"
   principal     = "apigateway.amazonaws.com"
-  #source_arn    = "${aws_api_gateway_deployment.search_api_gateway_deployment.execution_arn}/*/*"
-  #source_arn    ="${replace(aws_api_gateway_deployment.search_api_gateway_deployment.execution_arn, var.stage, "")}*/*"
-  source_arn = "arn:aws:execute-api:*:*:${aws_api_gateway_rest_api.search_api_gateway.id}/*/*/*"
+  source_arn    = "${aws_api_gateway_deployment.search_api_gateway_deployment.execution_arn}/*/*"
+  #source_arn = "${replace(aws_api_gateway_deployment.search_api_gateway_deployment.execution_arn, var.stage, "*")}/*/*"
+  #source_arn = "arn:aws:execute-api:${var.aws_region}:${aws_account_id}:${aws_api_gateway_rest_api.search_api_gateway.id}/*/*/*"
 }
 
 resource "aws_lambda_function" "search_lambda" {
