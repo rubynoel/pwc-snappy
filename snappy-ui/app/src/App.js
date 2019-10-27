@@ -1,14 +1,17 @@
-import React, { Component, Fragment } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import SearchPanel from './components/SearchPanel';
+import React, { Component, Fragment } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import SearchPanel from "./components/SearchPanel";
 
 class App extends Component {
+  constructor(props, context) {
+    super(props, context);
+  }
   render() {
-    return (
-      <>
-        <SearchPanel />
-      </>
-    );
+    if (this.props.authState == "signedIn") {
+      return <SearchPanel />;
+    } else {
+      return null;
+    }
   }
 }
 
