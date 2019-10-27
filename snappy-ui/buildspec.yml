@@ -22,7 +22,7 @@ phases:
       - echo "Running terraform validate..."
       - terraform init -backend=false snappy-ui/terraform && terraform validate snappy-ui/terraform
       - cd snappy-ui/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
-      - aws s3 cp snappy-ui/app/build s3://s3-website-$APPLICATION_ID-$STAGE/snappy/
+      - aws s3 cp --recursive snappy-ui/app/build s3://s3-website-$APPLICATION_ID-$STAGE
   post_build:
     commands:
       - echo Build completed on `date`
