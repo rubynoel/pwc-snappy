@@ -40,22 +40,14 @@ const queries = {
 const searchByCompanyName = async (pool, searchParams) => {
   const client = await pool.connect();
   try {
-    console.log(`Connected to db ${client}`);
     validate(searchParams);
     const {keyword, offset, limit} = searchParams;
-    console.log(
-        `query is ${JSON.stringify(
-            queries.findByCompanyName(keyword, offset, limit),
-        )}`,
-    );
     const queryResponse = await client.query(
         queries.findByCompanyName(keyword, offset, limit),
     );
-    console.log(`Search response is ${JSON.stringify(queryResponse)}`);
     const countQueryResponse = await client.query(
         queries.countFindByCompanyName(keyword),
     );
-    console.log(`Search response is ${JSON.stringify(countQueryResponse)}`);
     return {
       queryResponse: queryResponse,
       countQueryResponse: countQueryResponse,

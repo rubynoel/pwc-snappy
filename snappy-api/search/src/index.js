@@ -5,8 +5,6 @@ const {search} = require('./search');
 module.exports.handler = async (event, context) => {
   let apiResponse = {};
   try {
-    console.log('request: ' + JSON.stringify(event));
-
     const {fieldName, fieldValue} = event.pathParameters ?
       event.pathParameters :
       {};
@@ -18,7 +16,7 @@ module.exports.handler = async (event, context) => {
       fieldName,
       fieldValue,
       limit,
-      offset: from,
+      from: from,
     });
 
     if (searchResponse) {
