@@ -69,6 +69,8 @@ paths:
         passthroughBehavior: "when_no_match"
         httpMethod: POST
         type: aws_proxy
+      x-amazon-apigateway-auth:
+        type: AWS_IAM
     options:
       description: For CORS support
       responses:

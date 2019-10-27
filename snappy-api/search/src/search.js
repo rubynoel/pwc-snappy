@@ -39,6 +39,8 @@ const search = async (params) => {
     case searchFields.RESTRICTED_STATUS:
       searchResults = await searchByRestrictedStatus(pgPool, {
         restrictedFlag: fieldValue,
+        offset: offset,
+        limit: pageLimit,
       });
       break;
     default:
