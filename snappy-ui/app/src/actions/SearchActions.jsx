@@ -33,6 +33,7 @@ const doSearch = async (dispatch, searchParams) => {
   const { searchKeyword, searchType } = searchParams;
   const { from, limit } = paginationDefaults;
   const apiHost = "ftgq3a6bw2.execute-api.ap-southeast-2.amazonaws.com/test";
+  //{process.env.API_URL}
   const pathString = `/search/${searchType}/${searchKeyword}?${serializeQuery({
     from,
     limit
