@@ -18,11 +18,11 @@ phases:
   build:
     commands:
       - echo "Packaging application"
-      - cd snappy-ui/ui && npm run build && cd ../..
+      - cd snappy-ui/app && npm run build && cd ../..
       - echo "Running terraform validate..."
-      - terraform init -backend=false snappy-api/terraform && terraform validate snappy-api/terraform
-      - cd snappy-api/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
-      - aws s3 cp snappy-ui/ui/build s3://s3-website-$APPLICATION_ID-$STAGE/snappy/
+      - terraform init -backend=false snappy-ui/terraform && terraform validate snappy-ui/terraform
+      - cd snappy-ui/terraform && chmod +x deploy.sh && sh deploy.sh && cd ../..
+      - aws s3 cp snappy-ui/app/build s3://s3-website-$APPLICATION_ID-$STAGE/snappy/
   post_build:
     commands:
       - echo Build completed on `date`
