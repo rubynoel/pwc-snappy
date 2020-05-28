@@ -15,8 +15,3 @@ The rest api is secured with IAM auth. Lambda runs securely within VPC in privat
 React app for snappy search.
 When user signs in, the app authenticates the user with Cognito identity provider and obtains temporary IAM credentials using Cognito Identity Pool Federated Identities. The IAM credentials are passed to the Snappy rest api for searching company database by name, business number and restricted status.
 Api Urls are hardcoded as of now. No time to webpack :-)
-
-
-
-SELECT count(search.business_number) FROM company_master as search   WHERE search.restricted_flag is $1  ORDER BY search.updated_on DESC
-      offset $2 limit $3
